@@ -6,3 +6,4 @@ permalink: /post/:title
 excerpt_separator: <!--more--> 
 paginate: 10
 title: "Welcome to Brett's Blog"
+exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md']
