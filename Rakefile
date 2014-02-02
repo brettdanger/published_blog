@@ -9,14 +9,14 @@
     desc "Generate blog files"
     task :generate do
       Jekyll::Site.new(Jekyll.configuration({
-        "source"      =&gt; ".",
-        "destination" =&gt; "_site"
+        "source"      => ".",
+        "destination" => "_site"
       })).process
     end
 
 
     desc "Generate and publish blog to gh-pages"
-    task :publish =&gt; [:generate] do
+    task :publish => [:generate] do
       Dir.mktmpdir do |tmp|
         system "mv _site/* #{tmp}"
         system "git checkout -b gh-pages"
@@ -31,4 +31,4 @@
       end
     end
 
-task :default =&gt; :publish
+task :default =>:publish
