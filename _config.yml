@@ -1,0 +1,8 @@
+name: "!danger"
+markdown: redcarpet
+pygments: true
+layout: layout_right
+permalink: /post/:title
+excerpt_separator: <!--more--> 
+paginate: 10
+title: "Welcome to Brett's Blog"

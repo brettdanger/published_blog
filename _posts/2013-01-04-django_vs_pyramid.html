@@ -1,0 +1,28 @@
+---
+layout: post
+title: "Django vs Pyramid - My Comparison"
+date: 2013-01-04 10:34:22
+categories: programming
+tags: [python, django, pyramid, mongodb, node.js]
+description: "My comparison of Django and Pyramid after building a blog engine with both frameworks.  Both have their advantages and disadvantages and here are my thoughts."
+teaser: "http://www.afrobella.com/wp-content/uploads/2012/12/Django-Unchained-wallpapers-1920x1200-2.jpg"
+excerpt:  "A few months back I posted that I wanted to away from PHP for web development and started learning some of the major MVC web development frameworks.  The first one I tried was Pyramid, and I wrote about creating a blog engine with Pyramid and MongoDB.  This was an awesome experience and I loved using it, so next I wanted to try using Django. </p> <p><strong>Django's Strengths</strong></p>
+<p>You can find many good comparisons on the web.  So these are my thoughts after build a blog engine in both systems.  Getting started with Django was quicker and easier than with Pyramid because it had everything built in and had much better documentation and tutorials.  I loved the kitchen sink manage.py utility vs several Pyramid commands like pserve and pcreate.  Also the settings.py was easier and had a better structure than Pyramid's ini files.</p>"
+---
+
+<p><br><img src="http://www.afrobella.com/wp-content/uploads/2012/12/Django-Unchained-wallpapers-1920x1200-2.jpg" style="display: block;  width: 60%; margin: 0 auto;"><br></p><p>A few months back I <a href="/post/web_framework_project_intro">posted</a> that I wanted to away from PHP for web development and started learning some of the major MVC web development frameworks.  The first one I tried was Pyramid, and I wrote about creating a blog engine with Pyramid and MongoDB.  This was an awesome experience and I loved using it, so next I wanted to try using Django. </p> 
+
+<p><strong>Django's Strengths</strong></p>
+
+<p>You can find many good <a href="http://stackoverflow.com/questions/13186250/which-python-web-frameworkdjango-or-django-norel-or-pyramid-to-use-when-mongod">comparisons</a> on the web.  So these are my thoughts after build a blog engine in both systems.  Getting started with Django was quicker and easier than with Pyramid because it had everything built in and had much better documentation and tutorials.  I loved the kitchen sink manage.py utility vs several Pyramid commands like pserve and pcreate.  Also the settings.py was easier and had a better structure than Pyramid's ini files.</p>
+
+<p>One of Django's major advantages was the built in admin page.  On my first impression, I loved the admin page and how well the auto-generated pages worked.  However, once I started to tweak them I found I was spending as much time working on them as if I created an admin site from scratch. I did find a cool bootstrap theme for the admin pages on <a href=" https://github.com/riccardo-forina/django-admin-bootstrapped">github</a>. Overall I like having the auto-generated admin pages for prototyping, but in anything more serious I prefer to make sexier javascript heavier admin pages.</p>
+
+<p><strong>Pyramid Strengths</strong></p>
+<p>When working with Pyramid, I found it really easy to switch modules very easy, like when I switched to Jinja from Chameleon or using pymongo instead of an ORM.  This is possible in Django but not nearly as easily, in Pyramid it is usually just a simple PIP install and no special configurations are necessary.  I also like the syntax for creating views in Pyramid.  Pyramid had great use of Python's decorators and easier it made using AJAX easier with its XHR views. </p>
+
+<p><strong>Conclusion</strong></p>
+<p>I loved both frameworks and when I am doing a hack-a-thon project or building rapid prototypes then I most likely will use Django.  I can get started with a few shell commands and start building.  When I have very specific requirements (like mongoDB over sql) or when I want to hand-pick every module myself, then I will probably use Pyramid.  In fact I am going to keep the pyramid version of my blog running over the django version, because I feel it is more customized to the various experiments that I will want to take.</p>
+
+<p><strong>What's Next?</strong></p>
+<p>Originally, I wanted to spend some time comparing these Python frameworks to Ruby on Rails, but after spending several months with Django and Pyramid and after reading a decent amount of flamewar forums I have decided that I don't need to look at RoR because I have used Python for years, but haven't used Ruby much at all.  Python seems to have many different good MVC frameworks without having to learn a new language and framework.  I also have been diving deep into node.js and love it as a server-side alternative to python. Tornado/Twisted seems like a cool async framework, a la node, that I will definitely play with soon.   Flask and web2py are also on my experiment list and would love your thoughts on those in the comments.</p>

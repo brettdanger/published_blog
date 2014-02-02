@@ -1,0 +1,293 @@
+---
+layout: post
+title: "Creating a blog engine with Python, Pyramid, MongoDB and Twitter Bootstrap"
+date: 2012-09-07 10:34:22
+categories: programming
+tags: [python, pyramid, mongodb, bootstrap, project, chameleon templates]
+teaser: "http://www.pylonsproject.org/static/images/pyramid-small.png"
+---
+
+
+<p><!-- Introduce the project and link to previous post, explain reasoning behind mongoDB and bootstrap -->
+</p><p>In my <a href="http://www.brettdangerfield.com/post/web_framework_project_intro">previous post</a> I explained that I wanted to explore new non-php web development frameworks like Rails and Django.  So I decided to build a blog engine with each of them and see which framework felt the best.  I also decided that if I am going to embark on a relatively time consuming learning project, that I wanted to expand my scope and experiment with Twitter Bootstrap and MongoDB as well.</p>
+<p>I have used Python several times in the past, and have never touched Ruby outside of a Hello World rails tutorial.  I also have some peers that hate rails (even though they like Ruby), so I decided to start on the Python side of the fence.  After some research and discussion with peers I decided to start with <a href="http://docs.pylonsproject.org/projects/pyramid/en/1.3-branch/narr/firstapp.html" target="_blank">Pyramid</a> rather than Django.</p>
+<p>Pyramid seems to provide more flexibility when break ingaway from the convention, and considering I wanted to use Mongo instead of SQL this felt like a great place to start. After completing this exercise I found that I really enjoyed working with Pyramid(and Mongo), so much so that I pushed my code to my VPS and went public with my blog.  This also delayed my Django and Rails trails as I had to prepare to deploy a production version of my Pyramid site.  I will start the Rails version soon, but for now here are the steps I took to create the Pyramid version.</p>
+<!--more-->
+<!-- Creating the pyramid project -->
+<p>In order to get started I followed my usual routine for a python project on my Mac (you can find help for these steps all over the web):
+</p><ol>
+    <li>Check my python version</li>
+    <li>Create a virtual environment called myBlog in my src directory using virtualenv</li>
+    <li>Git Init my project (of course)</li>
+    <li>Install Pyramid in my virtualenv</li>
+</ol>
+{% raw %}
+<pre class="prettyprint"><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">]</span><span class="pln">$   virtualenv myBlog
+</span><span class="typ">New</span><span class="pln"> python executable </span><span class="kwd">in</span><span class="pln"> myBlog</span><span class="pun">/</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">python
+</span><span class="typ">Installing</span><span class="pln"> setuptools</span><span class="pun">............</span><span class="kwd">done</span><span class="pun">.</span><span class="pln">
+</span><span class="typ">Installing</span><span class="pln"> pip</span><span class="pun">...............</span><span class="kwd">done</span><span class="pun">.</span><span class="pln">
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">]</span><span class="pln">$ cd myBlog
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ ls
+bin     include lib
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">./</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">pip install pyramid
+</span><span class="str">'Downloading/unpacking pyramid
+  Downloading pyramid-1.3.2.tar.gz (2.4Mb): 2.4Mb downloaded
+  Running setup.py egg_info for package pyramid</span></pre><p></p>
+<p>Now I have a development environment setup for working with Pyramid, but I still  need to setup my app.  Pyramid has <a href="http://docs.pylonsproject.org/projects/pyramid/en/1.0-branch/narr/project.html#paster-templates-included-with-pyramid" target="_blank">setup scaffolds</a>(called Paster templates) similar to Rails.  In the Pyramid documentation I found a <a href="http://docs.pylonsproject.org/projects/pyramid_cookbook/en/latest/database/mongodb.html" target="_blank">setup scaffold for mongoDB</a>.  The only problem with this template is that it uses <a href="http://docs.pylonsproject.org/projects/pyramid/en/1.0-branch/narr/muchadoabouttraversal.html" target="_blank">URL traversal instead of URL matching</a>.  I am familiar with URL mapping, but this is a learning exercise so why not use traversal and learn a new method? So I installed this template and setup my app:
+</p><pre class="prettyprint"><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">./</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">pip install pyramid_mongodb
+</span><span class="typ">Downloading</span><span class="pun">/</span><span class="pln">unpacking pyramid</span><span class="pun">-</span><span class="pln">mongodb
+  </span><span class="typ">Downloading</span><span class="pln"> pyramid_mongodb</span><span class="pun">-</span><span class="lit">1.3</span><span class="pun">.</span><span class="pln">tar</span><span class="pun">.</span><span class="pln">gz </span><span class="pun">(</span><span class="lit">54Kb</span><span class="pun">):</span><span class="pln"> </span><span class="lit">54Kb</span><span class="pln"> downloaded
+  </span><span class="typ">Running</span><span class="pln"> setup</span><span class="pun">.</span><span class="pln">py egg_info </span><span class="kwd">for</span><span class="pln"> </span><span class="kwd">package</span><span class="pln"> pyramid</span><span class="pun">-</span><span class="pln">mongodb
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">./</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">pcreate </span><span class="pun">-</span><span class="pln">t
+</span><span class="typ">Available</span><span class="pln"> scaffolds</span><span class="pun">:</span><span class="pln">
+  alchemy</span><span class="pun">:</span><span class="pln">          </span><span class="typ">Pyramid</span><span class="pln"> </span><span class="typ">SQLAlchemy</span><span class="pln"> project </span><span class="kwd">using</span><span class="pln"> url dispatch
+  pyramid_mongodb</span><span class="pun">:</span><span class="pln">  pyramid </span><span class="typ">MongoDB</span><span class="pln"> project
+  starter</span><span class="pun">:</span><span class="pln">          </span><span class="typ">Pyramid</span><span class="pln"> starter project
+  zodb</span><span class="pun">:</span><span class="pln">             </span><span class="typ">Pyramid</span><span class="pln"> ZODB project </span><span class="kwd">using</span><span class="pln"> traversal
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">./</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">pcreate </span><span class="pun">-</span><span class="pln">t pyramid_mongodb my_blog
+</span><span class="typ">Creating</span><span class="pln"> directory </span><span class="pun">/</span><span class="typ">Users</span><span class="pun">/</span><span class="pln">me</span><span class="pun">/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">/</span><span class="pln">my_blog
+  </span><span class="typ">Recursing</span><span class="pln"> </span><span class="kwd">into</span><span class="pln"> </span><span class="pun">+</span><span class="kwd">package</span><span class="pun">+</span><span class="pln">
+    </span><span class="typ">Creating</span><span class="pln"> </span><span class="pun">/</span><span class="typ">Users</span><span class="pun">/</span><span class="pln">me</span><span class="pun">/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">/</span><span class="pln">my_blog</span><span class="pun">/</span><span class="pln">my_blog</span><span class="pun">/</span><span class="pln">
+    </span><span class="pun">.........</span><span class="pln">
+</span><span class="typ">Welcome</span><span class="pln"> to </span><span class="typ">Pyramid</span><span class="pun">.</span><span class="pln">  </span><span class="typ">Sorry</span><span class="pln"> </span><span class="kwd">for</span><span class="pln"> the convenience</span><span class="pun">.</span><span class="pln">
+
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">]</span><span class="pln">$ cd my_blog</span><span class="pun">/</span><span class="pln">
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">/</span><span class="pln">my_blog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">../</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">python setup</span><span class="pun">.</span><span class="pln">py develop
+running develop
+running egg_info
+creating my_blog</span><span class="pun">.</span><span class="pln">egg</span><span class="pun">-</span><span class="pln">info</span></pre>
+Now we are ready to roll, let's turn on our new site:
+<pre class="prettyprint"><span class="pln">the reload option allows us to change
+</span><span class="kwd">our</span><span class="pln"> code </span><span class="kwd">and</span><span class="pln"> the site will detect </span><span class="kwd">and</span><span class="pln"> restart
+</span><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">/</span><span class="pln">my_blog</span><span class="pun">]</span><span class="pln">$ </span><span class="pun">../</span><span class="pln">bin</span><span class="pun">/</span><span class="pln">pserve development</span><span class="pun">.</span><span class="pln">ini </span><span class="pun">--</span><span class="pln">reload
+</span><span class="typ">Starting</span><span class="pln"> subprocess </span><span class="kwd">with</span><span class="pln"> file monitor
+</span><span class="typ">Starting</span><span class="pln"> server </span><span class="kwd">in</span><span class="pln"> PID </span><span class="lit">25805.</span><span class="pln">
+serving on </span><span class="lit">0.0</span><span class="pun">.</span><span class="lit">0.0</span><span class="pun">:</span><span class="lit">6543</span><span class="pln"> view at http</span><span class="pun">:</span><span class="com">//127.0.0.1:6543</span></pre>
+And here is our new Mongo based site: <br>
+<img src="https://lh4.googleusercontent.com/-ajoL44Ohg9I/UCVrfrDoPcI/AAAAAAAAAa0/qIDpqO7zjJ8/s640/pyramid_shot1.jpg" title="pyramid screenshot" style="display: block; margin: 0 auto; width: 80%">
+<p>Next I went and downloaded the latest version of<a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> and added all the code into my /static folder.  I then used the bootstrap Hero example and modified it to create a new template in my /templates directory. A great tutorial/rundown on Twitter Bootstrap is <a href="http://webdesign.tutsplus.com/tutorials/complete-websites/twitter-bootstrap-101-introduction/" target="_blank">available on nettuts.</a></p>
+<!-- designing the mongo tables -->
+<p>Now the site is ready to start building.  First I needed to design a schema for my blog posts.  I plan to build an admin site, but for now I am just setting up the read-only site, therefore I am going to add a few test entries in mongo directly.  For my posts I need a title, unique url, tags, active flag so I can edit before posting, post date, category, and author.  </p>
+<pre class="prettyprint"><span class="pun">[</span><span class="pln">me@mymac</span><span class="pun">:~/</span><span class="pln">src</span><span class="pun">/</span><span class="pln">myBlog</span><span class="pun">/</span><span class="pln">my_blog</span><span class="pun">]</span><span class="pln">$ mongo
+</span><span class="typ">MongoDB</span><span class="pln"> shell version</span><span class="pun">:</span><span class="pln"> </span><span class="lit">2.0</span><span class="pun">.</span><span class="lit">4</span><span class="pln">
+connecting to</span><span class="pun">:</span><span class="pln"> test</span></pre>
+<p>Now let's setup our post structure by creating a javascript object:</p>
+<pre class="prettyprint"><span class="pun">&gt;</span><span class="pln"> </span><span class="kwd">var</span><span class="pln"> postExample </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="str">'title'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'My Post Example'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'author'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Me'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'tags'</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="str">'mongodb'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'test'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'tag1'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'tag2'</span><span class="pun">],</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'postDate'</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">Date</span><span class="pun">(),</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'url'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'my_post_example'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'category'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'programming'</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'active'</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">                  </span><span class="str">'postBody'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'This is a test post'</span><span class="pun">};</span><span class="pln">
+</span><span class="pun">&gt;</span><span class="pln"> postExample
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="str">"title"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"My Post Example"</span><span class="pun">,</span><span class="pln">
+    </span><span class="str">"author"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"Me"</span><span class="pun">,</span><span class="pln">
+    </span><span class="str">"tags"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln">
+        </span><span class="str">"mongodb"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"test"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"tag1"</span><span class="pun">,</span><span class="pln">
+        </span><span class="str">"tag2"</span><span class="pln">
+    </span><span class="pun">],</span><span class="pln">
+    </span><span class="str">"postDate"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">ISODate</span><span class="pun">(</span><span class="str">"2012-08-12T21:36:26.218Z"</span><span class="pun">),</span><span class="pln">
+    </span><span class="str">"url"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"my_post_example"</span><span class="pun">,</span><span class="pln">
+    </span><span class="str">"category"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"programming"</span><span class="pun">,</span><span class="pln">
+    </span><span class="str">"active"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln">
+    </span><span class="str">"postBody"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"This is a test post"</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span><span class="pun">&gt;</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">blogExample</span><span class="pun">.</span><span class="pln">save</span><span class="pun">(</span><span class="pln">postExample</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">&gt;</span><span class="pln"> db</span><span class="pun">.</span><span class="pln">blogExample</span><span class="pun">.</span><span class="pln">find</span><span class="pun">();</span><span class="pln">
+</span><span class="pun">{</span><span class="pln"> </span><span class="str">"_id"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">ObjectId</span><span class="pun">(</span><span class="str">"5028220e61419e477bf0dcab"</span><span class="pun">),</span><span class="pln"> </span><span class="str">"title"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"My Post Example"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"author"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"Me"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"tags"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln"> </span><span class="str">"mongodb"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"test"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"tag1"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"tag2"</span><span class="pln"> </span><span class="pun">],</span><span class="pln"> </span><span class="str">"postDate"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="typ">ISODate</span><span class="pun">(</span><span class="str">"2012-08-12T21:36:26.218Z"</span><span class="pun">),</span><span class="pln"> </span><span class="str">"url"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"my_post_example"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"category"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"programming"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"active"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="kwd">true</span><span class="pun">,</span><span class="pln"> </span><span class="str">"postBody"</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">"This is a test post"</span><span class="pln"> </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">&gt;</span></pre>
+<p>You can see we also saved the entry to the blogExample collection with the db.blogExample.save(object); command.  Now we can serve this entry on our site. To do so we need to create our root view that serves our entries in newest to oldest order.  But before we do that we need to design our URL routes.  So for each single blog we need /post/{url_of_post} and for categories we need /category/{category_name}.  So after researching Traversal, I modified my resources.py file like so:</p>
+<pre class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">Root</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    __name__ </span><span class="pun">=</span><span class="pln"> </span><span class="str">''</span><span class="pln">
+    __parent__ </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">None</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> request</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">pass</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __getitem__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> key </span><span class="pun">==</span><span class="pln"> </span><span class="str">'post'</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Post</span><span class="pun">()</span><span class="pln">
+        </span><span class="kwd">elif</span><span class="pln"> key </span><span class="pun">==</span><span class="pln"> </span><span class="str">'category'</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">Category</span><span class="pun">()</span><span class="pln">
+        </span><span class="kwd">raise</span><span class="pln"> </span><span class="typ">KeyError</span><span class="pln">
+
+
+</span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Post</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    __name__ </span><span class="pun">=</span><span class="pln"> </span><span class="str">''</span><span class="pln">
+    __parent__ </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Root</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">pass</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __getitem__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> key</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">PostName</span><span class="pun">(</span><span class="pln">key</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">raise</span><span class="pln"> </span><span class="typ">KeyError</span><span class="pln">
+
+</span><span class="kwd">class</span><span class="pln"> </span><span class="typ">PostName</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> name</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__name__ </span><span class="pun">=</span><span class="pln"> name
+
+
+</span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Category</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    __name__ </span><span class="pun">=</span><span class="pln"> </span><span class="str">''</span><span class="pln">
+    __parent__ </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Root</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">pass</span><span class="pln">
+
+    </span><span class="kwd">def</span><span class="pln"> __getitem__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> key</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> key</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> </span><span class="typ">CategoryName</span><span class="pun">(</span><span class="pln">key</span><span class="pun">)</span><span class="pln">
+        </span><span class="kwd">raise</span><span class="pln"> </span><span class="typ">KeyError</span><span class="pln">
+
+</span><span class="kwd">class</span><span class="pln"> </span><span class="typ">CategoryName</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> name</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">__name__ </span><span class="pun">=</span><span class="pln"> name</span></pre>
+<p>Now we have the URL structure setup, so we can start building our views.  I started by creating a views folder and then created an empty __init__.py file inside it so that I can organize my views into multiple files.  The __init__.py file in our app's root directory has this line: config.scan('my_blog').  This means that it will scan our project for views, enabling us to create a new file with more views.</p>
+<p>Here is our root.py file in our views directory, this defines our root view, and also aliases /home to our root view.  This view file also defines our 404 view for any page that doesn't match our url routes.
+<!-- designing the pyramid traversal routes -->
+</p><pre class="prettyprint"><span class="kwd">from</span><span class="pln"> pyramid</span><span class="pun">.</span><span class="pln">view </span><span class="kwd">import</span><span class="pln"> view_config
+</span><span class="kwd">import</span><span class="pln"> my_blog</span><span class="pun">.</span><span class="pln">resources
+</span><span class="kwd">from</span><span class="pln"> my_blof</span><span class="pun">.</span><span class="pln">blogdata </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pln">
+</span><span class="kwd">from</span><span class="pln"> pyramid</span><span class="pun">.</span><span class="pln">httpexceptions </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">HTTPFound</span><span class="pln">
+
+</span><span class="com">#this line defines our root view</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.Root'</span><span class="pun">,</span><span class="pln"> renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/home_entry_list.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="com">#this line also attaches /home to our root view</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.Root'</span><span class="pun">,</span><span class="pln"> renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/home_entry_list.pt'</span><span class="pun">,</span><span class="pln"> name</span><span class="pun">=</span><span class="str">'home'</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> my_view</span><span class="pun">(</span><span class="pln">request</span><span class="pun">):</span><span class="pln">
+    </span><span class="com">#get mongoDB posts</span><span class="pln">
+    blog_data </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pun">(</span><span class="pln">request</span><span class="pun">)</span><span class="pln">
+    posts </span><span class="pun">=</span><span class="pln"> blog_data</span><span class="pun">.</span><span class="pln">get_recent_posts</span><span class="pun">(</span><span class="lit">10</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+
+    entries </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[]</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> post </span><span class="kwd">in</span><span class="pln"> posts</span><span class="pun">:</span><span class="pln">
+        postDate </span><span class="pun">=</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postDate'</span><span class="pun">].</span><span class="pln">strftime</span><span class="pun">(</span><span class="str">"%B %d %Y"</span><span class="pun">)</span><span class="pln">
+        entry </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="str">'title'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'title'</span><span class="pun">],</span><span class="pln">
+               </span><span class="str">'url'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'url'</span><span class="pun">],</span><span class="pln">
+               </span><span class="str">'date'</span><span class="pun">:</span><span class="pln"> postDate</span><span class="pun">,</span><span class="pln">
+                        </span><span class="str">'author'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'author'</span><span class="pun">],</span><span class="pln">
+                        </span><span class="str">'blog_body'</span><span class="pun">:</span><span class="pln"> strip_tags</span><span class="pun">(</span><span class="pln">post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postText'</span><span class="pun">][:</span><span class="lit">1000</span><span class="pun">])</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="str">'...'</span><span class="pun">,</span><span class="pln">
+                        </span><span class="str">'tags'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'tags'</span><span class="pun">]}</span><span class="pln">
+        entries</span><span class="pun">.</span><span class="pln">append</span><span class="pun">(</span><span class="pln">entry</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">{</span><span class="str">'cur_page'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'home'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'page_title'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Welcome to Brett\'s Blog'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'entries'</span><span class="pun">:</span><span class="pln"> entries</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">#this handles our 404 not found view</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'pyramid.httpexceptions.HTTPNotFound'</span><span class="pun">,</span><span class="pln"> renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/404_error.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> not_found</span><span class="pun">(</span><span class="pln">request</span><span class="pun">):</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pun">{</span><span class="str">'message'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Error 404, Page Not Found'</span><span class="pun">,</span><span class="pln">  </span><span class="str">'cur_page'</span><span class="pun">:</span><span class="pln"> </span><span class="str">''</span><span class="pun">,</span><span class="pln"> </span><span class="str">'page_title'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Requested Page Not Found'</span><span class="pun">}</span></pre>
+<!-- pyramid views and mongo class -->
+<p>The BlogData object is a class that handles all of our fetches from mongoDB, here is the contents:</p>
+<pre class="prettyprint"><span class="kwd">class</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pun">(</span><span class="kwd">object</span><span class="pun">):</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> __init__</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> request</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">settings </span><span class="pun">=</span><span class="pln"> request</span><span class="pun">.</span><span class="pln">registry</span><span class="pun">.</span><span class="pln">settings
+        </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">collection </span><span class="pun">=</span><span class="pln"> request</span><span class="pun">.</span><span class="pln">db</span><span class="pun">[</span><span class="str">'blogExample'</span><span class="pun">]</span><span class="pln">
+
+
+    </span><span class="com">#get a list of  blog blogPosts, handle pagination</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> get_recent_posts</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> num_of_entries</span><span class="pun">,</span><span class="pln"> page</span><span class="pun">,</span><span class="pln"> titles_only</span><span class="pun">=</span><span class="kwd">False</span><span class="pun">):</span><span class="pln">
+        row </span><span class="pun">=</span><span class="pln"> num_of_entries </span><span class="pun">*</span><span class="pln"> </span><span class="pun">(</span><span class="pln">page </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+        entries </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">collection</span><span class="pun">.</span><span class="pln">find</span><span class="pun">({</span><span class="str">'active'</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">True</span><span class="pun">}).</span><span class="pln">sort</span><span class="pun">(</span><span class="str">'_id'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">)[</span><span class="pln">row</span><span class="pun">:</span><span class="pln"> row </span><span class="pun">+</span><span class="pln"> num_of_entries</span><span class="pun">]</span><span class="pln">
+        </span><span class="kwd">if</span><span class="pln"> titles_only</span><span class="pun">:</span><span class="pln">
+            titles </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[]</span><span class="pln">
+            </span><span class="kwd">for</span><span class="pln"> entry </span><span class="kwd">in</span><span class="pln"> entries</span><span class="pun">:</span><span class="pln">
+                this_entry </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="str">'title'</span><span class="pun">:</span><span class="pln"> entry</span><span class="pun">[</span><span class="str">'title'</span><span class="pun">],</span><span class="pln"> </span><span class="str">'url'</span><span class="pun">:</span><span class="pln"> entry</span><span class="pun">[</span><span class="str">'url'</span><span class="pun">]}</span><span class="pln">
+                titles</span><span class="pun">.</span><span class="pln">append</span><span class="pun">(</span><span class="pln">this_entry</span><span class="pun">)</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> titles
+        </span><span class="kwd">else</span><span class="pun">:</span><span class="pln">
+            </span><span class="kwd">return</span><span class="pln"> entries
+
+    </span><span class="com">#get a single post by the url</span><span class="pln">
+    </span><span class="kwd">def</span><span class="pln"> get_post_by_url</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> url</span><span class="pun">):</span><span class="pln">
+        post </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">collection</span><span class="pun">.</span><span class="pln">find_one</span><span class="pun">({</span><span class="str">'url'</span><span class="pun">:</span><span class="pln">  url</span><span class="pun">})</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> post
+
+    </span><span class="kwd">def</span><span class="pln"> get_recent_posts_by_category</span><span class="pun">(</span><span class="kwd">self</span><span class="pun">,</span><span class="pln"> category</span><span class="pun">,</span><span class="pln"> num_of_entries</span><span class="pun">,</span><span class="pln"> page</span><span class="pun">):</span><span class="pln">
+        row </span><span class="pun">=</span><span class="pln"> num_of_entries </span><span class="pun">*</span><span class="pln"> </span><span class="pun">(</span><span class="pln">page </span><span class="pun">-</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+        entries </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">self</span><span class="pun">.</span><span class="pln">collection</span><span class="pun">.</span><span class="pln">find</span><span class="pun">({</span><span class="str">'category'</span><span class="pun">:</span><span class="pln"> category</span><span class="pun">,</span><span class="pln"> </span><span class="str">'active'</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">True</span><span class="pun">}).</span><span class="pln">sort</span><span class="pun">(</span><span class="str">'_id'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">-</span><span class="lit">1</span><span class="pun">)[</span><span class="pln">row</span><span class="pun">:</span><span class="pln"> row </span><span class="pun">+</span><span class="pln"> num_of_entries</span><span class="pun">]</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> entries
+</span></pre>
+<p>This object can get us a list of posts, a list of just the titles, a list of posts for a specific category, and a single post via the url entry.  This should be sufficient for now.  You can see in my view, that our root view pulls up the home_entry_list.pt template which looks like this:</p>
+<pre class="prettyprint lang-xml"><metal:main use-macro="load: structure.pt"><span class="pln">
+</span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">metal:fill-slot</span><span class="pun">=</span><span class="atv">"main_content"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">tal:repeat</span><span class="pun">=</span><span class="atv">"entry entries"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"hero-unit"</span><span class="tag">&gt;</span><span class="pln">
+            </span><span class="tag">&lt;h3&gt;&lt;a</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"/post/${structure: entry.url}"</span><span class="tag">&gt;</span><span class="pln">${structure: entry.title}</span><span class="tag">&lt;/a&gt;&lt;/h3&gt;</span><span class="pln">
+            </span><span class="tag">&lt;h4&gt;</span><span class="pln">${structure: entry.date}</span><span class="tag">&lt;/h4&gt;</span><span class="pln">
+            </span><span class="tag">&lt;p</span><span class="pln"> </span><span class="atn">tal:content</span><span class="pun">=</span><span class="atv">"structure: entry.blog_body"</span><span class="tag">&gt;&lt;/p&gt;</span><span class="pln">
+
+            </span><span class="tag">&lt;p&gt;&lt;a</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"btn btn-primary"</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"/post/${structure: entry.url}"</span><span class="tag">&gt;</span><span class="pln">Read Post »</span><span class="tag">&lt;/a&gt;&lt;/p&gt;</span><span class="pln">
+            </span><span class="tag">&lt;p&gt;&lt;/p&gt;&lt;h4&gt;&lt;a</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"/post/${structure: entry.url}#disqus_thread"</span><span class="tag">&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;&lt;/p&gt;</span><span class="pln">
+            </span><span class="tag">&lt;i</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"icon-tags icon-large"</span><span class="tag">&gt;&lt;/i&gt;</span><span class="pln">&nbsp;</span><span class="tag">&lt;span</span><span class="pln"> </span><span class="atn">tal:repeat</span><span class="pun">=</span><span class="atv">"tag entry.tags"</span><span class="tag">&gt;&lt;a</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"/tag/${structure: tag}"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"label label-success"</span><span class="tag">&gt;</span><span class="pln">${structure: tag</span><span class="tag">&lt;/a&gt;</span><span class="pln">
+</span><span class="tag">&lt;/span&gt;</span><span class="pln">
+          </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+</span><span class="tag">&lt;/metal:main&gt;</span></metal:main></pre>
+<p>This template injects itself into the structure.pt template, which is my site's main shell with head, header, footer, sidebar and main content.  This was the only part of the project I really hated.  Chameleon templates were a pain to work with, simple stuff is pretty easy but breaking my HTML layout into multiple templates was a pain that I never quite figured out.  Having worked with Magento, Wordpress and Drupal templates in the past made me want to create a layout template that pulls in a head, header, main, etc template.  I couldn't figure out how to do this, so I ended up with a single structure.pt template file that had all my elements.  I am looking forward to finding a better template solution. </p>
+<!-- Chameleon sucks -->
+<p>Now all that is left is the views for the categories and the individual posts.  I created a post.py file in my views directory and defined them like so:</p>
+<pre class="prettyprint"><span class="kwd">from</span><span class="pln"> pyramid</span><span class="pun">.</span><span class="pln">view </span><span class="kwd">import</span><span class="pln"> view_config</span><span class="pun">,</span><span class="pln"> render_view
+</span><span class="kwd">import</span><span class="pln"> my_blog</span><span class="pun">.</span><span class="pln">resources
+</span><span class="kwd">from</span><span class="pln"> my_blog</span><span class="pun">.</span><span class="pln">blogdata </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pln">
+</span><span class="kwd">from</span><span class="pln"> pyramid</span><span class="pun">.</span><span class="pln">httpexceptions </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">HTTPNotFound</span><span class="pln">
+
+</span><span class="com">#note the context, this view handles the /post and /post/{url} views</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.Post'</span><span class="pun">,</span><span class="pln">  renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/post.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.PostName'</span><span class="pun">,</span><span class="pln"> name</span><span class="pun">=</span><span class="str">''</span><span class="pun">,</span><span class="pln"> renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/post.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> post</span><span class="pun">(</span><span class="pln">context</span><span class="pun">,</span><span class="pln"> request</span><span class="pun">):</span><span class="pln">
+    </span><span class="com">#get mongoDB posts</span><span class="pln">
+    blog_data </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pun">(</span><span class="pln">request</span><span class="pun">)</span><span class="pln">
+    </span><span class="com">#context.__name__ is our {url} and this comes from resources.py</span><span class="pln">
+    post </span><span class="pun">=</span><span class="pln"> blog_data</span><span class="pun">.</span><span class="pln">get_post_by_url</span><span class="pun">(</span><span class="pln">context</span><span class="pun">.</span><span class="pln">__name__</span><span class="pun">)</span><span class="pln">
+
+    </span><span class="com">#throw a NotFound Exception if the {url} doesnt exist, this will kick off our 404 view</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> post </span><span class="kwd">is</span><span class="pln"> </span><span class="kwd">None</span><span class="pun">:</span><span class="pln">
+        </span><span class="kwd">raise</span><span class="pln"> </span><span class="typ">HTTPNotFound</span><span class="pun">(</span><span class="str">'notfound'</span><span class="pun">).</span><span class="pln">exception
+   </span><span class="com">#convert the date to a human readable string</span><span class="pln">
+    postDate </span><span class="pun">=</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postDate'</span><span class="pun">].</span><span class="pln">strftime</span><span class="pun">(</span><span class="str">"%B %d %Y"</span><span class="pun">)</span><span class="pln">
+   </span><span class="com">#return our found view to the template</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">{</span><span class="str">'cur_page'</span><span class="pun">:</span><span class="pln"> </span><span class="str">''</span><span class="pun">,</span><span class="pln">
+          </span><span class="str">'page_title'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'title'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'title'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'title'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'category'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'category'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'author'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'author'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'url'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'url'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'date'</span><span class="pun">:</span><span class="pln"> postDate</span><span class="pun">,</span><span class="pln">
+          </span><span class="str">'blog_body'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postText'</span><span class="pun">],</span><span class="pln">
+          </span><span class="str">'tags'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'tags'</span><span class="pun">]}</span><span class="pln">
+
+
+</span><span class="com">#these views define our category views</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.Category'</span><span class="pun">,</span><span class="pln">  renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/home_entry_list.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="lit">@view_config</span><span class="pun">(</span><span class="pln">context</span><span class="pun">=</span><span class="str">'my_blog:resources.CategoryName'</span><span class="pun">,</span><span class="pln">  name</span><span class="pun">=</span><span class="str">''</span><span class="pun">,</span><span class="pln"> renderer</span><span class="pun">=</span><span class="str">'my_blog:templates/home_entry_list.pt'</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> category_view</span><span class="pun">(</span><span class="pln">context</span><span class="pun">,</span><span class="pln"> request</span><span class="pun">):</span><span class="pln">
+     </span><span class="com">#get mongoDB posts</span><span class="pln">
+    blog_data </span><span class="pun">=</span><span class="pln"> </span><span class="typ">BlogData</span><span class="pun">(</span><span class="pln">request</span><span class="pun">)</span><span class="pln">
+    posts </span><span class="pun">=</span><span class="pln"> blog_data</span><span class="pun">.</span><span class="pln">get_recent_posts_by_category</span><span class="pun">(</span><span class="pln">context</span><span class="pun">.</span><span class="pln">__name__</span><span class="pun">,</span><span class="pln"> </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+
+    entries </span><span class="pun">=</span><span class="pln"> </span><span class="pun">[]</span><span class="pln">
+    </span><span class="kwd">for</span><span class="pln"> post </span><span class="kwd">in</span><span class="pln"> posts</span><span class="pun">:</span><span class="pln">
+        postDate </span><span class="pun">=</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postDate'</span><span class="pun">].</span><span class="pln">strftime</span><span class="pun">(</span><span class="str">"%B %d %Y"</span><span class="pun">)</span><span class="pln">
+        entry </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="str">'title'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'title'</span><span class="pun">],</span><span class="pln">
+               </span><span class="str">'url'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'url'</span><span class="pun">],</span><span class="pln">
+               </span><span class="str">'date'</span><span class="pun">:</span><span class="pln"> postDate</span><span class="pun">,</span><span class="pln">
+                        </span><span class="str">'author'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'author'</span><span class="pun">],</span><span class="pln">
+                        </span><span class="str">'blog_body'</span><span class="pun">:</span><span class="pln"> strip_tags</span><span class="pun">(</span><span class="pln">post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'postText'</span><span class="pun">][:</span><span class="lit">1000</span><span class="pun">])</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="str">'...'</span><span class="pun">,</span><span class="pln">  </span><span class="com">#notice we limit our post_body to 1000 chars on the pages that list multiple posts</span><span class="pln">
+                        </span><span class="str">'tags'</span><span class="pun">:</span><span class="pln"> post</span><span class="pun">[</span><span class="pln">u</span><span class="str">'tags'</span><span class="pun">]}</span><span class="pln">
+        entries</span><span class="pun">.</span><span class="pln">append</span><span class="pun">(</span><span class="pln">entry</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="kwd">not</span><span class="pln"> entries</span><span class="pun">:</span><span class="pln">
+        </span><span class="kwd">raise</span><span class="pln"> </span><span class="typ">HTTPNotFound</span><span class="pun">(</span><span class="str">'notfound'</span><span class="pun">).</span><span class="pln">exception
+    </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">{</span><span class="str">'cur_page'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'home'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'page_title'</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Category: '</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> context</span><span class="pun">.</span><span class="pln">__name__</span><span class="pun">,</span><span class="pln"> </span><span class="str">'entries'</span><span class="pun">:</span><span class="pln"> entries</span><span class="pun">}</span></pre>
+<!-- Admin? -->
+<p>That sums it up, I will dive into the admin page later on as I get more time.  Next up Rails!</p>
+<p><strong>Update:</strong> I have uploaded some code to github <a href="https://github.com/brettdanger/pyramid-mongo-blog" target="_blank">here</a>.  This has an admin page that partially works (posts but not pages). This also pulls a user from the mongodb for authentication.  This has disqus/google admin and an html editor in it. Leave a comment below if you have any questions</p>
+{% endraw %}
