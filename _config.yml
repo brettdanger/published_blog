@@ -1,6 +1,8 @@
 name: "!danger"
 markdown: redcarpet
 pygments: true
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
 layout: layout_right
 permalink: /post/:title
 excerpt_separator: <!--more--> 
