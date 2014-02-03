@@ -18,3 +18,10 @@ require 'redcarpet'
 markdown = Redcarpet.new("Hello World!")
 puts markdown.to_html
 ```
+####Table Example
+
+| Name    |  Age    | Location         |
+|-------|------|------------|
+| Brett     | 22        | Denver, CO    |
+| Renee   | 59        | Lake Wales, FL |
+{.table-bordered}
