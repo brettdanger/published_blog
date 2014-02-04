@@ -29,7 +29,13 @@
     desc "Generate and publish blog to gh-pages"
 
     task :publish => [:delete_branch, :generate] do
-      puts "\n## Forcing the _site subdirectory to be project root"
+      puts "\n## Commiting Generated Site "
+      status = system("git add _siteprod/.")
+      puts status ? "Success" : "Failed"
+      puts "\n## Commiting Gen Site"
+      status = system("git commit -a -m \"autogen\"")
+      puts status ? "Success" : "Failed"
+      puts "\n## Forcing the _siteprod subdirectory to be project root"
       status = system("git filter-branch --subdirectory-filter _siteprod/ -f")
       puts status ? "Success" : "Failed"
       puts "\n## Pushing gh-pages branches to origin"
