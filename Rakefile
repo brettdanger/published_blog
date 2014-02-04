@@ -17,18 +17,21 @@
 
     desc "Generate and publish blog to gh-pages"
     task :publish => [:generate] do
-      Dir.mktmpdir do |tmp|
-        system "mv _site/* #{tmp}"
-        system "git checkout -b gh-pages"
-        system "rm -rf *"
-        system "mv #{tmp}/* ."
-        message = "Site updated at #{Time.now.utc}"
-        system "git add ."
-        system "git commit -am #{message.shellescape}"
-        system "git push origin gh-pages --force"
-        system "git checkout master"
-        system "echo yolo"
-      end
+      puts "\n## Deleting gh-pages branch"
+      status = system("git branch -D gh-pages")
+      puts status ? "Success" : "Failed"
+      puts "\n## Creating new gh-pages branch and switching to it"
+      status = system("git checkout -b gh-pages")
+      puts status ? "Success" : "Failed"
+      puts "\n## Forcing the _site subdirectory to be project root"
+      status = system("git filter-branch --subdirectory-filter _site/ -f")
+      puts status ? "Success" : "Failed"
+      puts "\n## Pushing gh-pages branches to origin"
+      status = system("git push origin gh-pages")
+      puts status ? "Success" : "Failed"
+      puts "\n## Switching back to master branch"
+      status = system("git checkout master")
+      puts status ? "Success" : "Failed"
     end
 
 task :default =>:publish
