@@ -8,9 +8,10 @@
 
     desc "Generate blog files"
     task :generate do
+      puts "\n## Generating Site"
       Jekyll::Site.new(Jekyll.configuration({
         "source"      => ".",
-        "destination" => "_site"
+        "destination" => "_siteprod"
       })).process
     end
 
@@ -29,7 +30,7 @@
 
     task :publish => [:delete_branch, :generate] do
       puts "\n## Forcing the _site subdirectory to be project root"
-      status = system("git filter-branch --subdirectory-filter _site/ -f")
+      status = system("git filter-branch --subdirectory-filter _siteprod/ -f")
       puts status ? "Success" : "Failed"
       puts "\n## Pushing gh-pages branches to origin"
       status = system("git push origin gh-pages --force")
