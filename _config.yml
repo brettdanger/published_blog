@@ -4,7 +4,7 @@ pygments: true
 redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript", "tables"]
 layout: layout_right
-permalink: /post/:title
+permalink: /post/:title/
 excerpt_separator: <!--more--> 
 paginate: 10
 title: "Welcome to Brett's Blog"
