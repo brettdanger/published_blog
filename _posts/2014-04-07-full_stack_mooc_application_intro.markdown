@@ -19,7 +19,7 @@ So instead, I am going build an aggregator and open source the code and see if o
 Here is an outline of the project that I will build and write about:
 
 - [Intro to the project (this post)](/post/full_stack_mooc_application_intro/)
-- **Part 1** - [Building a python-based backend that collects course listings and stores them. Initially get courses from Coursera and save to MongoDB and an RDMBS (postgres)](/post/mooc_aggregator_backend_with_python/)
+- **Part 1** - [Building a python-based backend that collects course listings and stores them. Initially get courses from Coursera and save to MongoDB and an RDMBS (postgres)](/post/full_stack_mooc_app_part_1_python_backend/)
 - **Part 2** - Add more providers (EDX) and storage engines (ElasticSearch)
 - **Part 3** - Port backend to NodeJS as a learning experience and point of comparison
 - **Part 4** - Build an API that will be used to power the website and mobile app. (Flask for python, ExpressJS for Node)
