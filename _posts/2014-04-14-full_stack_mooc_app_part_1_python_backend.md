@@ -289,8 +289,12 @@ Ran 0 tests in 0.000s
 OK
 ```
 
-In my next post I will show my storage implementations. Initially I decided to build an engine for mongodb and postgres. However I used sqlalchemy so it will support any RDBMS that SQL alchemy supports.  You can take an early peek at the github page linked below.  There you will find the final version of the wisdom backend. I used virtualenv and a yaml config file for the final version so it is a little different than this post.
+In my [next post](/post/full_stack_mooc_app_part_1_continued_python_backend/) I will show my storage implementations. Initially I decided to build an engine for mongodb and postgres. However I used sqlalchemy so it will support any RDBMS that SQL alchemy supports.  You can take an early peek at the github page linked below.  There you will find the final version of the wisdom backend. I used virtualenv and a yaml config file for the final version so it is a little different than this post.
 
-## Project Wisdom Code:
+
+**[Part 1 continued, mongodb storage engine](/post/full_stack_mooc_app_part_1_continued_python_backend/)**
+
+
+#### Project Wisdom Code:
 
 **<a class="btn btn-large" href="http://www.github.com/brettdanger"><i class=" icon-github" target="_blank"></i>&nbsp;&nbsp;Wisdom Backend</a>**

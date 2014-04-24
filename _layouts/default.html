@@ -19,9 +19,6 @@
                                 <i class="icon-calendar"></i> {{ entry..date | date_to_string }} 
                                 <span class="pull-right" ><i class="icon-comment"></i> <a href="{{ entry.url }}#disqus_thread" >0 Comments</a></span>
                              </div>
-                             <div class="meta">
-                              <i class="icon-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %} 
-                            </div>
                             <!-- Thumbnail -->
                             {% if entry.teaser %}
                              <div class="bthumb2">
@@ -33,6 +30,9 @@
                             {% else %}
                               <div>{{ entry.excerpt }}</div>
                             {% endif %}
+                             <div class="meta">
+                              <i class="icon-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %} 
+                            </div>
                             <p><a class="btn" href="{{entry.url}}">Read Post &raquo;</a></p>
                             <div class="clearfix"></div>
                           </div>
