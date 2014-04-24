@@ -396,7 +396,7 @@ engine = create_engine(get_settings()['connection_string'])
 Base.metadata.create_all(engine)
 ```
 
-It should be pretty simple to follow, however if you don't have any experience with ORMs and SQL Alchemy start here.  To create a schema, assuming you have your sql implementation installed and running, simply edit the connection_string statement in the ```config.yaml``` file.
+It should be pretty simple to follow, however if you don't have any experience with ORMs and SQL Alchemy [start here](http://docs.sqlalchemy.org/en/rel_0_9/orm/tutorial.html).  To create a schema, assuming you have your sql implementation installed and running, simply edit the connection_string statement in the ```config.yaml``` file.
 
 ```yaml
 
