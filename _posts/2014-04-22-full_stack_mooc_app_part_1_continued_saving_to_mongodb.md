@@ -5,7 +5,7 @@ date:   2014-04-22 10:34:22
 categories: programming
 tags: [github, python, sqlalchemy, postgres, mongodb, coursera]
 description: "Python Backend for online course aggregator. Building a modular backend with Python that supports multiple course providers and storage engines. This is part 1 with support for coursera and a storage engine for mongodb and relational databases using SQLAlchemy."
-teaser: "static/img/mooc_python.png"
+teaser: "/static/img/mooc_python.png"
 ---
 
 ### Part 1 Continued - Saving to mongodb
