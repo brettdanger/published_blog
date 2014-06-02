@@ -42,7 +42,7 @@
                                  <div class="post-meta">
                                   <span><i class="fa fa-calendar"></i> {{ entry.date | date_to_string }} </span>
                                   <span>In <a href="/category/{{ entry.categories }}">{{ entry.categories | first | capitalize }}</a></span>
-                                  <span class="right"><a href="{{ entry.url }}#disqus_thread" class="comments"><i class="fa fa-comments"></i> 0 </a></span>
+                                  <span class="right"><i class="fa fa-comments"></i><a href="{{ entry.url }}#disqus_thread" class="comments"> 0 </a></span>
                                 </div>
                                   <!-- Thumbnail -->
                                     {% if entry.teaser %}
