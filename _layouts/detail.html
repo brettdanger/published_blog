@@ -6,29 +6,21 @@
   <!-- HEADER HERE -->
    {% include header.html %}
 
-    <div class="main">
-        <div class="container-fluid blog">
-            <div class="row-fluid">
-                <div class="span8">
-                    
+<section id="content">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-8 col-sm-8 post-single">
                             {{ content }}
-                        
-                </div><!--/span-->
-                <div class="span4">
-                      {% include sidebar.html %}
-                </div><!--/span-->
-            </div><!--/row-->
-        </div>
+            </div><!--/span-->
+            <!-- sidebar here -->
+            {% include sidebar.html %}
+        </div> <!-- end row -->
       </div>
-
+</section>
+    <!-- end:content -->
 <!-- Footer HERE -->
    {% include footer.html %}
 
-<!-- Scroll to top -->
-<span class="totop"><a href="#"><i class="icon-chevron-up"></i></a></span>
-
-   <script src="/static/js/jquery.flexslider-min.js"></script> <!-- Flex slider -->
-   <script src="/static/js/custom.js"></script> <!-- Custom sript -->
   </body>
 </html>
 

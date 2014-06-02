@@ -6,7 +6,7 @@ categories: technology
 tags: [nikon, samsung, slr, photography]
 description: "I recently replaced my Nikon DSLR with a new compact mirrorless.  After considering many factors I decided on the Samsung NX300"
 teaser: "http://www.samsung.com/us/system/consumer/product/ev/nx/30/evnx300zbavus/NX300_019_R-Perspective-w-2050_brown_5.jpg"
-excerpt: This month I took my second paternity leave and earlier I decided to get a new camera to celebrate the occasion. There were several factors that led to this decision, I wanted something smaller and I wanted a camera that my wife would actually use. She only shoots with her iphone because she doesn't like the size of our DSLR Nikon D3100. She also doesn't like using the viewfinder and has trouble focusing at the right spot. I got my DSLR about 4 years ago before a trip to Europe. At the time we didn't have kids and we just wanted to take better photos of our trips, hikes, and dogs.  I also wanted to learn more about photography, so I ended up buying the entry level Nikon. It was a good choice, my sister is a real photographer and she shoots with Nikons so she could help me and even loan me some lenses.  Despite my satisfaction with this camera, over the years we have used it less and less. For one, when you travel with a diaper bag and child you really don't want to lug a big camera bag around as well.
+excerpt:  I recently replaced my Nikon D3100 with a new compact mirrorless from Samsung, the NX300.  I wanted a camera that could take great photos like my Nikon but in a much more portable form factor.  I am loving my NX so far, here is my review.
 ---
 
 <img src="http://www.samsung.com/us/system/consumer/product/ev/nx/30/evnx300zbavus/NX300_019_R-Perspective-w-2050_brown_5.jpg" alt="Samsung NX300" width="50%">
@@ -31,7 +31,9 @@ Reading several reviews started making me excited about this camera.  There seem
 After spending the last month with this new camera, I can say it has been everything I wanted and more.  It has me taking far better pictures than I did with my DSLR, which is most likely because I didn't have a good prime lens.  It is much smaller and easier to lug around, and we use the wifi features all the time.  Here are some of my favorite photos with the camera so far (some lightroom retouching).
 
 <!-- G+ filmstrip here -->
+<div style="display: block">
 <embed type="application/x-shockwave-flash" src="https://photos.gstatic.com/media/slideshow.swf" width="800" height="533" flashvars="host=picasaweb.google.com&hl=en_US&feat=flashalbum&RGB=0x000000&feed=https%3A%2F%2Fpicasaweb.google.com%2Fdata%2Ffeed%2Fapi%2Fuser%2F114663190220745941196%2Falbumid%2F6006107418804344737%3Falt%3Drss%26kind%3Dphoto%26hl%3Den_US" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+</div>
 
 **Camera Reviews I read:**
 

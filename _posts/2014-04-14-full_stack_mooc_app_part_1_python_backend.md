@@ -3,6 +3,7 @@ layout: post
 title:  "Mooc Aggregator Project, Python backend with MongoDB and SQLAlachemy"
 date:   2014-04-14 10:34:22
 categories: programming
+popular: true
 tags: [github, python, sqlalchemy, postgres, mongodb, coursera]
 description: "Python Backend for online course aggregator. Building a modular backend with Python that supports multiple course providers and storage engines. This is part 1 with support for coursera and a storage engine for mongodb and relational databases using SQLAlchemy."
 teaser: "/static/img/mooc_python.png"

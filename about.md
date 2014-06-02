@@ -1,12 +1,12 @@
 ---
 layout: page
-title: About Brett Dangerfield
+title: About Brett
+name: About Brett
 permalink: /page/about/index.html
-description: About Brett Dangerfield
+description: About Brett
+header_pic: wyoming1.jpg
 ---
-
-##About Brett
-<img src="{{ site.url }}/static/img/about_pic.jpg" alt="Brett in snow" style="float:left; margin: 0 20px 20px 0; border: 1px solid #CA8F37;" width="40%"/>
+<img src="{{ site.url }}/static/img/about_pic.jpg" alt="Brett in snow" style="float:right; margin: 0 0 20px 20px; border: 1px solid #CA8F37;" width="40%"/>
 I am a Software Engineer for an [__amazing company__](http://www.returnpath.com) in Denver, Colorado.  In addition to tech/geek/programming topics that I like to read and write about, I also love sports, the outdoors, skiing and of course my family. I have an amazing wife and terrific children that make me laugh every day.
 
 I enjoy full stack programming, but mostly live on the frontend. For the most part I code in Javascript, Python or PHP, and occasionally  in Java or C#. I love finding patterns in data and using it to solve problems or tell stories. Luckily I get to play with loads of data, you could even call it BIG!  
