@@ -3,11 +3,12 @@ layout: post
 title:  "Playing with REALTIME data, Python and D3"
 date:   2014-05-01 10:34:22
 categories: programming
+popular: true
 tags: [twitter, realtime, d3.js, python, tweety, flask, rabbitmq]
-description: "Playing with realtime data using the twitter stream, d3.js and RabbitMQ"
+description: Playing with realtime data using the twitter stream, d3.js and RabbitMQ
 teaser: "/static/img/tag_cloud.png"
+excerpt: I wanted a reason to play with RabbitMQ and D3 for awhile. So this seemed like a good way to do both.  I animated a tag cloud that is filled with words from a single twitter topic fed in realtime.
 ---
-
 I am taking a break from my [MOOC Aggregator project](/post/full_stack_mooc_application_intro/) to play with D3.js and some realtime data. I recently read this great blog post about [performing some data analysis with python using the twitter stream](http://www.danielforsyth.me/analyzing-a-nhl-playoff-game-with-twitter/) and I wanted to take it another step and play with the data in realtime. So instead of dumping the data into mongodb I wanted to fill a queue in order to play with the data as it flows in.  I decided to use [RabbitMQ](https://www.rabbitmq.com/) as a AMQP provider.
 
 RabbitMQ is simple to install on a mac: ```brew install rabbitmq```. This installs the queue and some more common plugins.  *See the [RabbitMQ](https://www.rabbitmq.com/download.html) installation page for help installing on other systems*.  Once it was installed I started it up with the ```rabbitmq-server``` command.
