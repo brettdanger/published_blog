@@ -31,43 +31,69 @@
                             </div>
                             </div>
                         </div>
-                    {% else %}
-                    <!-- break -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="post-container">
-                            <div class="post-content">
-                                <div class="heading-title heading-small">
-                                  <h2><a href="{{entry.url}}">{{ entry.title }}</a></h2>
+                    {% elsif entry.type == 'microblog' %}
+                        <!-- break -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="post-container">
+                                <div class="post-content no-padding">
+                                    <img src="{{ entry.image_url }}" alt="">
                                 </div>
-                                 <div class="post-meta">
-                                  <span><i class="fa fa-calendar"></i> {{ entry.date | date_to_string }} </span>
-                                  <span>In <a href="/category/{{ entry.categories }}">{{ entry.categories | first | capitalize }}</a></span>
-                                  <span class="right"><i class="fa fa-comments"></i><a href="{{ entry.url }}#disqus_thread" class="comments"> 0 </a></span>
+                                <div class="post-content">
+                                    <div class="post-meta">
+                                      <span><i class="fa fa-calendar"></i> {{ entry.date | date_to_string }} </span>
+                                    </div>
+                                    <p>{{ entry.entry }}</p>
                                 </div>
-                                  <!-- Thumbnail -->
-                                    {% if entry.teaser %}
-                                     <div class="bthumb2">
-                                        <a href="{{entry.url}}"><img src="{{ entry.teaser }}" alt="" /></a>
-                                     </div>
-                                    {% endif %}
-                                {% if entry.short_body %}
-                                  {{ entry.short_body }}
-                                {% else %}
-                                  <p>{{ entry.excerpt }}</p>
-                                {% endif %}
-                                <div class="post-link">
-                                    <a href="{{entry.url}}"><span>Read more</span></a>
-                                </div>
-                            </div>
-                            <div class="post-atribut">
-                                <div class="row">                                    
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <p><i class="fa fa-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %}</p>
+                                <div class="post-atribut">
+                                    <div class="row">
+                                        <div class="row">                                    
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <p><i class="fa fa-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% else %}
+                        {% if entry.hidden != true %}
+                        <!-- break -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="post-container">
+                                <div class="post-content">
+                                    <div class="heading-title heading-small">
+                                      <h2><a href="{{entry.url}}">{{ entry.title }}</a></h2>
+                                    </div>
+                                     <div class="post-meta">
+                                      <span><i class="fa fa-calendar"></i> {{ entry.date | date_to_string }} </span>
+                                      <span>In <a href="/category/{{ entry.categories }}">{{ entry.categories | first | capitalize }}</a></span>
+                                      <span class="right"><i class="fa fa-comments"></i><a href="{{ entry.url }}#disqus_thread" class="comments"> 0 </a></span>
+                                    </div>
+                                      <!-- Thumbnail -->
+                                        {% if entry.teaser %}
+                                         <div class="bthumb2">
+                                            <a href="{{entry.url}}"><img src="{{ entry.teaser }}" alt="" /></a>
+                                         </div>
+                                        {% endif %}
+                                    {% if entry.short_body %}
+                                      {{ entry.short_body }}
+                                    {% else %}
+                                      <p>{{ entry.excerpt }}</p>
+                                    {% endif %}
+                                    <div class="post-link">
+                                        <a href="{{entry.url}}"><span>Read more</span></a>
+                                    </div>
+                                </div>
+                                <div class="post-atribut">
+                                    <div class="row">                                    
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <p><i class="fa fa-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     {% endif %}
                     {% endfor %}
                 </div>

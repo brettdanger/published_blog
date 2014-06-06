@@ -30,10 +30,83 @@ Reading several reviews started making me excited about this camera.  There seem
 
 After spending the last month with this new camera, I can say it has been everything I wanted and more.  It has me taking far better pictures than I did with my DSLR, which is most likely because I didn't have a good prime lens.  It is much smaller and easier to lug around, and we use the wifi features all the time.  Here are some of my favorite photos with the camera so far (some lightroom retouching).
 
-<!-- G+ filmstrip here -->
-<div style="display: block">
-<embed type="application/x-shockwave-flash" src="https://photos.gstatic.com/media/slideshow.swf" width="800" height="533" flashvars="host=picasaweb.google.com&hl=en_US&feat=flashalbum&RGB=0x000000&feed=https%3A%2F%2Fpicasaweb.google.com%2Fdata%2Ffeed%2Fapi%2Fuser%2F114663190220745941196%2Falbumid%2F6006107418804344737%3Falt%3Drss%26kind%3Dphoto%26hl%3Den_US" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
-</div>
+<section id="portfolio">
+        <ul class="list-unstyled container-portfolio">
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh3.googleusercontent.com/-yKGeltUX9No/U1n7Qs8_N6I/AAAAAAAAD8o/FRUFQgU4KMI/w1173-h782-no/SAM_0558.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/+BrettDangerfield/photos/photo/6006107842438707106" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh6.googleusercontent.com/-8TcL9xMvAug/U1n8N9po5qI/AAAAAAAAD_8/dvv1hhyVzfU/w1022-h681-no/SAM_1002-3.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/+BrettDangerfield/photos/photo/6006108894892975778" class="btn btn-info" target="_blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh4.googleusercontent.com/-pRVp0Hp0-Zc/U1n8Phk_9DI/AAAAAAAAEAA/Hr712ZiLDEs/w1156-h771-no/SAM_1036-4.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/+BrettDangerfield/photos/photo/6006108921717060658" class="btn btn-info" target="_blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh5.googleusercontent.com/-glTVQshuUmc/U1n7kc_cmII/AAAAAAAAD9M/nylV5YRDU-I/w1173-h782-no/sam_0120.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006108181751437442?pid=6006108181751437442&oid=114663190220745941196" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh4.googleusercontent.com/-rDKJshnob3s/U1n8InHeJKI/AAAAAAAAD_0/zaW8WpO9LK8/w1173-h782-no/SAM_0989-1.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006108802944738466?pid=6006108802944738466&oid=114663190220745941196" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh3.googleusercontent.com/-aFzUmf2WS1o/U1n7TmwxnHI/AAAAAAAAD_o/7g8cBdKP3Z4/w1173-h782-no/SAM_0559.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006107892316478578?pid=6006107892316478578&oid=114663190220745941196" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh4.googleusercontent.com/-xkxlfplb8N4/U1n69NWIVCI/AAAAAAAAD8I/auGEjtAf8_c/w1173-h782-no/SAM_0806.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006107507536712738?pid=6006107507536712738&oid=114663190220745941196" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh3.googleusercontent.com/-P5byUX-SxEE/U1n7Dc3qdZI/AAAAAAAAD8U/AA08jgnUpkc/w1173-h782-no/SAM_0922.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006107614783108498?pid=6006107614783108498&oid=114663190220745941196" class="btn btn-info" target="blank">View »</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="portfolio-item">
+                    <div class="portfolio-img" style="background: url(https://lh5.googleusercontent.com/-Wcm6MR2rHYo/U1n8VG__XiI/AAAAAAAAD_w/x8dNh2wK-pg/w1173-h782-no/fb_back_new-19.jpg);"></div>
+                    <div class="portfolio-caption">
+                            <a href="https://plus.google.com/photos/114663190220745941196/albums/6006107418804344737/6006109017661726242?pid=6006109017661726242&oid=114663190220745941196" class="btn btn-info" target="_blank">View »</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+
 
 **Camera Reviews I read:**
 
