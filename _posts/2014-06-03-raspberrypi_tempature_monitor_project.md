@@ -1,9 +1,38 @@
 ---
-hidden: true
+layout: post
+title:  "Building a wireless temperature sensore with a Raspberry Pi and Xbee Wireless modules"
+date:   2014-06-13 10:34:22
+categories: programming, electronics
+popular: true
+tags: [raspberry pi, arduino, python, d3.js, sparkfun, electronics, smart home, XBEE]
+description: Building a wireless temperature sensor with a Raspberry Pi, and XBEE wireless modules
+teaser: "https://cdn.sparkfun.com//assets/parts/6/8/0/5/11215-01.jpg"
+excerpt: For awhile I have wanted to start doing more with my Raspberry Pi than just XBMC. So I decided to build a wireless temperature sensor to monitor the temperature in my kids' rooms.
 ---
+###Project Introduction
+
+I have owned a Raspberry Pi for a few years now, and outside of [XMBC]() I haven't done much with it. When I purchased it, I had the intent to do some cool electronic experiments but never tried.  A perfect sample project sprang up when my 2 year old son started to wake up in the middle of the night sweating because his room is too hot.  We keep our thermostat set at 72 degrees almost all the time, but our upper level stays quite warmer than the main level.  So in order to find the perfect thermostat setting I decided to build a temperature monitor that I can place in the boy's room and find the right setting.
 
 
+<img src="/static/img/pi_screen1.png" width="85%">
 
+### Parts List
+
+Here are the parts you will need for this project:
+
+- (2) [XBee Series1 Wireless Units](https://www.sparkfun.com/products/11215)
+- (1) [XBee Explorer USB Board](https://www.sparkfun.com/products/8687) 
+- (1) [TMP36 Analog Temperature Sensor](https://www.sparkfun.com/products/10988)
+- (1) [XBee Breakout Board](https://www.sparkfun.com/products/8276)
+- (1) [Raspberry Pi Model B](https://www.sparkfun.com/products/11546)
+- [Jumper Wire, Breadboards, USB Cables, GPIO Cable](https://www.sparkfun.com/categories/149)
+- Optional: Solder, Project Box
+
+### Part One - Programming the XBee's
+
+Once all the parts arrive, we are going to use the USB Explorer board to connect our Xbee's to a computer and program them. The USB board provides the computer with a serial interface to the Xbee. We will use simple Serial AT Commands to program the Xbee.  In order to get started you will need to download and install your platforms [FTDI drivers](http://www.ftdichip.com/Drivers/VCP.htm).
+ 
+```
 Starting Up Tempature Monitor
 {'rssi': 'O', 'source_addr': '\x00\x11', 'id': 'rx_io_data', 'samples': [{'adc-0': 214}, {'adc-0': 215}, {'adc-0': 215}], 'options': '\x00'}
 volt_average:  214.666666667
@@ -201,4 +230,4 @@ fahrenheit:  153.160868
 volt_average:  361.333333333
 temp in C:  66.5589066667
 fahrenheit:  151.806032
-
+```
