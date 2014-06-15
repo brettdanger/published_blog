@@ -536,4 +536,4 @@ After running the import, we can look in our database and see our imported data.
 
 ## Project Wisdom Code:
 
-**<a class="btn btn-large" href="http://www.github.com/brettdanger"><i class=" icon-github" target="_blank"></i>&nbsp;&nbsp;Wisdom Backend</a>**
+**<a class="btn btn-large" href="http://www.github.com/brettdanger"><i class="fa fa-github" target="_blank"></i>&nbsp;&nbsp;Wisdom Backend</a>**
