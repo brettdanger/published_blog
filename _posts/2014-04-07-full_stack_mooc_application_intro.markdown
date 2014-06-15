@@ -39,6 +39,6 @@ I am calling this **"Project Wisdom"** (yes it's a dumb name but I am not good a
 
 ## Project Wisdom Code:
 
-**<a class="btn btn-large" href="http://www.github.com/brettdanger"><i class=" icon-github" target="_blank"></i>&nbsp;&nbsp;Wisdom Backend</a>**
+**<a class="btn btn-large" href="http://www.github.com/brettdanger"><i class="fa fa-github" target="_blank"></i>&nbsp;&nbsp;Wisdom Backend</a>**
 
 
