@@ -68,7 +68,7 @@ ATWR #write the settings to the device
 **Setting up the sensor**
 Now the Xbee's are ready to chat with each other and we need to wire them up.  First up is the temperature sensing unit.  I am going to use the USB explorer, a breadboard, and some wires to wire it up like this:
 
-<img src="/static/img/pi_screen1.png" width="85%">
+<img src="https://lh3.googleusercontent.com/-w8oiHNEsK00/U54jWRr0v3I/AAAAAAAAEb0/-HN7MIiXqPk/w964-h1112-no/xbee_tempature.png" width="65%">
 
 Here is what mine looks like after connecting everything together and setting it in the freezer.
 
@@ -77,7 +77,7 @@ Here is what mine looks like after connecting everything together and setting it
 **Setting up the receiver**
 I used the GPIO ribbon cable for the pi and used male to male prototyping wires. I also used the XBee breakout board.  Here is the diagram:
 
-<img src="/static/img/pi_screen1.png" width="85%">
+<img src="https://lh6.googleusercontent.com/-9bmIuENd0Ac/U54jWdn2hRI/AAAAAAAAEb4/0EZ-vA6siPw/w820-h1114-no/rasp_pi_to_xbee.png" width="55%">
 
 Here is what mine looked like:
 
@@ -417,7 +417,7 @@ This is my index.html jinja template that includes the d3.js code:
 </html>
 ```
 
-I used [rickshaw](http://code.shutterstock.com/rickshaw/) to make dealing with d3 easier.  The graph was pretty simple. I just defined the size, y-min and max and where to get the data.  In the onComplete callback I just setup the x-axis to be a time-based axis, added hover data and turned on the y axis ticks.
+I used [Rickshaw](http://code.shutterstock.com/rickshaw/) to make dealing with d3 easier.  The graph was pretty simple. I just defined the size, y-min and max and where to get the data.  In the onComplete callback I just setup the x-axis to be a time-based axis, added hover data and turned on the y axis ticks.
 
 ```javascript
 var graph = new Rickshaw.Graph.Ajax( {
@@ -470,9 +470,9 @@ Now when I start the webserver (as sudo since I am using port 80) and navigate t
 
 Now that everything is working, I want to be able to put this device in my kid's room without it being so fragile.  For this I bought a $3 box from radioshack and drilled a hole for the USB cable and sensor.  I also soldered the temp sensor to the USB explorer board.  Here is what that looks like:
 
-<img src="/static/img/pi_screen1.png" width="85%">
+<img src="//lh3.googleusercontent.com/-U00fT7jTTI8/U5KX4GBrXRI/AAAAAAAAEcQ/w34vqlHb9AA/w836-h1114-no/IMG_20140606_224057.jpg" width="75%">
 
-<img src="/static/img/pi_screen1.png" width="85%">
+<img src="https://lh6.googleusercontent.com/-okIXt9sG418/U5KYSH9ULtI/AAAAAAAAEWM/qkX2CAW-JjU/w836-h1114-no/IMG_20140606_224230.jpg" width="75%">
 
 ### What's Next
 
