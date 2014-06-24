@@ -2,7 +2,7 @@
 layout: post
 title:  "Building a wireless temperature sensor with a Raspberry Pi and Xbee Wireless modules"
 date:   2014-06-13 10:34:22
-categories: programming, electronics
+categories: programming electronics
 popular: true
 tags: [raspberry pi, arduino, python, d3.js, sparkfun, electronics, smart home, XBEE]
 description: Building a wireless temperature sensor with a Raspberry Pi, and XBEE wireless modules
