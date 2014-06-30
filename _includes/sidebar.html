@@ -37,8 +37,8 @@
     <div class="widget-sidebar widget_top-posts">
       <h3>Recent Posts</h3>
       <ul>
-        {% for post in site.posts limit: 8 %}
-        {% if post.type != 'blockquote' %}
+        {% for post in site.posts limit: 12 %}
+        {% if post.type != 'blockquote' and post.type != 'microblog' and post.type != 'tweet' %}
         <li>
             <div class="post-wrapper">
 

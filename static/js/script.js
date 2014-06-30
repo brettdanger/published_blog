@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+
 	/* Navbar */
 	$(window).scroll(function(){
 		if( $(window).scrollTop() > 80){
@@ -87,13 +88,13 @@ $(document).ready(function(){
 	$("#map").gmap3({
         map: {
             options: {
-              center: [-7.866315,110.389574],
+              center: [39.7392, -104.9847],
               zoom: 10,
               scrollwheel: false
             }  
          },
         marker:{
-            latLng: [-7.866315,110.389574],
+            latLng: [39.7392, -104.9847],
             options: {
              icon: new google.maps.MarkerImage(
                "https://dl.dropboxusercontent.com/u/29545616/Preview/location.png",
@@ -102,17 +103,5 @@ $(document).ready(function(){
             }
          }
     });
-	
-	//$('#map').gmap3('get').setCenter(new google.maps.LatLng(-7.866315,110.389574));
-    
-    /* Toggle Map */	
-	var mapContainer = $('.mapcontainer');
-	$('#openmap').on('click', function(){
-		$(this).toggleClass('closemap');
-		$('#map').toggleClass('showMap');
-		mapContainer.toggleClass('hidecontainer');
-		$('#map').gmap3('get').setCenter(new google.maps.LatLng(-7.866315,110.389574));
-	});
-
 	
 });

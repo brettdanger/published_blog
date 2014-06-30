@@ -26,7 +26,7 @@
 	[8. PAGING]
 	[9. SIDEBAR]
 	[10. PORTFOLIO]
-	[11. CONTACT]
+	[11. CONxTACT]
 	[12. PARTNER]
 	[13. FOOTER]
 	[14. COPYRIGHT]
@@ -1526,7 +1526,7 @@ pre code {
 
 #partner .brand-img > li{
 	float: left;
-	width: 25%;
+	width: 20%;
 	border: 1px solid #ddd;
 	border-right: none;
 	-o-box-sizing: border-box;
@@ -1540,7 +1540,10 @@ pre code {
 }
 
 #partner .brand-img > li > a{
-	padding: 20px 0px;
+	padding: 10px 0px;
+            font-size: 40px;
+            color: #1b1d2a;
+            font-weight: bold;
 	display: block;
 	text-align: center;
 	opacity: 0.5;

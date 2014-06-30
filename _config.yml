@@ -5,6 +5,6 @@ redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript", "tables"]
 permalink: /post/:title
 excerpt_separator: <!--more--> 
-paginate: 9
+paginate: 10
 title: "Welcome to Brett's Blog"
 exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'README.md']

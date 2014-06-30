@@ -1,7 +1,7 @@
 ---
 type: blockquote
-date:   2014-06-15 22:34:22
-tags: [quote, life, fatherhood]
-quote: Every father should remember that one day his son will follow his example instead of his advice.
-author: Charles F. Kettering
+date:   2014-06-01 10:34:22
+tags: [quote, life, sucess]
+quote: Success is liking yourself, liking what you do, and liking how you do it.
+author: Maya Angelou
 ---

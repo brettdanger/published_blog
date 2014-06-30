@@ -36,13 +36,40 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="post-container">
                                 <div class="post-content no-padding">
-                                    <img src="{{ entry.image_url }}" alt="">
+                                    {% if entry.image_url %}
+                                        <img src="{{ entry.image_url }}" alt="">
+                                    {% else %}
+                                        {{ entry.embed }}
+                                    {% endif %}
                                 </div>
                                 <div class="post-content">
                                     <div class="post-meta">
                                       <span><i class="fa fa-calendar"></i> {{ entry.date | date_to_string }} </span>
                                     </div>
                                     <p>{{ entry.entry }}</p>
+                                </div>
+                                <div class="post-atribut">
+                                    <div class="row">
+                                        <div class="row">                                    
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <p><i class="fa fa-tags"></i>&nbsp;{% for tag in entry.tags %}&nbsp;<a href="{{ site.url }}/tag/{{tag}}" class="label">{{tag}}</a>{% endfor %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% elsif entry.type == 'tweet' %}
+                        <!-- break -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="post-container">
+                                 {% if entry.image_url %}
+                                    <div class="post-content no-padding">
+                                        <img src="{{ entry.image_url }}" alt="">
+                                    </div>
+                                  {% endif %}
+                                <div class="post-content">
+                                    {{ entry.embed }}
                                 </div>
                                 <div class="post-atribut">
                                     <div class="row">
