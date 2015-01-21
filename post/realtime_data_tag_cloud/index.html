@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="img/favicon/favicon.png">
+
+    <title>Playing with REALTIME data, Python and D3</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--<link href="static/css/bootstrap.css" rel="stylesheet">-->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="static/css/bootstrap-theme.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Noto+Serif:700,400italic' rel='stylesheet' type='text/css'>
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/github.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/style_mod.css" rel="stylesheet">
+    <link href="/static/css/responsive.css" rel="stylesheet">
+    <link href="/static/js/prettify/prettify.css" type="text/css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+
+       <script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7196717-1', 'brettdangerfield.com');
+  ga('send', 'pageview');
+
+</script>
+          <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+   <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/masonry.pkgd.min.js"></script>
+    <script src="/static/js/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
+    <script src="/static/js/gmap3.min.js"></script>
+    <script src="/static/js/jquery.isotope.min.js"></script>
+    <script src="/static/js/jquery.easing.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script type="text/javascript" src="/static/js/prettify/prettify.js"></script>
+
+  </head>
+  <body>
+
+  <!-- HEADER HERE -->
+       <!-- begin:navbar -->
+    <nav class="navbar navbar-default navbar-transparent navbar-fixed-top" role="navigation">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-top">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><i class="fa fa-fighter-jet"></i> <span>Dang</span>er!</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-top">
+          <ul class="nav navbar-nav navbar-right">
+            <li  class=""><a href="/"><i class="icon-home icon-large"></i>Home</a></li>
+              <li class=""><a href="/page/about"><i class="icon-user icon-large"></i>About</a></li>
+              <li class=""><a href="/page/contact"><i class="icon-user icon-large"></i>Contact</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <!-- end:navbar -->
+
+    <!-- begin:header -->
+    <section id="header" class="heading" style="background: url(/static/img/backgrounds/sunset2.jpg);">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="title-desc">
+                        
+                            <h2>My Blog</h2>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </section>
+    <!-- end:header -->
+
+<section id="content">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-8 col-sm-8 post-single">
+                            <div class="heading-title">
+    <h2><a href="/post/realtime_data_tag_cloud">Playing with REALTIME data, Python and D3</a></h2>
+</div>
+<div class="post-meta">
+    <span><em>01 May 2014 </em></span>
+    <span><em>In <a href="#">Programming</a></em></span>
+    <span class="right" ><i class="fa fa-comment"></i> <a href="/post/realtime_data_tag_cloud#disqus_thread" >0 Comments</a></span>
+</div>
+<div id="story"><p>I am taking a break from my <a href="/post/full_stack_mooc_application_intro/">MOOC Aggregator project</a> to play with D3.js and some realtime data. I recently read this great blog post about <a href="http://www.danielforsyth.me/analyzing-a-nhl-playoff-game-with-twitter/">performing some data analysis with python using the twitter stream</a> and I wanted to take it another step and play with the data in realtime. So instead of dumping the data into mongodb I wanted to fill a queue in order to play with the data as it flows in.  I decided to use <a href="https://www.rabbitmq.com/">RabbitMQ</a> as a AMQP provider.</p>
+
+<p>RabbitMQ is simple to install on a mac: <code>brew install rabbitmq</code>. This installs the queue and some more common plugins.  <em>See the <a href="https://www.rabbitmq.com/download.html">RabbitMQ</a> installation page for help installing on other systems</em>.  Once it was installed I started it up with the <code>rabbitmq-server</code> command.</p>
+
+<!--more-->
+
+<p>Now I am ready to feed data into my queue. For this I used <a href="http://www.danielforsyth.me/analyzing-a-nhl-playoff-game-with-twitter/">Daniel Forsyth&#39;s</a> example that grabs a topic from the twitter stream and stores it into mongodb.I replaced the mongo code with activemq code. I used <a href="http://pika.readthedocs.org/en/latest/">Pika</a> for the python AMQP client. Here is my modified feed consumer:</p>
+<div class="highlight"><pre><code class="python language-python" data-lang="python"><span class="kn">import</span> <span class="nn">tweepy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c">#get your own twitter credentials at dev.twitter.com</span>
+<span class="n">consumer_key</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">consumer_secret</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">access_token</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+<span class="n">access_token_secret</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">OAuthHandler</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">set_access_token</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">access_token_secret</span><span class="p">)</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CustomStreamListener</span><span class="p">(</span><span class="n">tweepy</span><span class="o">.</span><span class="n">StreamListener</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">api</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">tweepy</span><span class="o">.</span><span class="n">StreamListener</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c">#setup rabbitMQ Connection</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+            <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+        <span class="c">#set max queue size</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;x-max-length&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s">&#39;twitter_topic_feed&#39;</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">status</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">created_at</span><span class="o">.</span><span class="n">timetuple</span><span class="p">())</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;geo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">geo</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">source</span>
+
+        <span class="c">#queue the tweet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+                                    <span class="n">routing_key</span><span class="o">=</span><span class="s">&#39;twitter_topic_feed&#39;</span><span class="p">,</span>
+                                    <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">):</span>
+        <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#39;Encountered error with status code:&#39;</span><span class="p">,</span> <span class="n">status_code</span>
+        <span class="k">return</span> <span class="bp">True</span>  <span class="c"># Don&#39;t kill the stream</span>
+
+    <span class="k">def</span> <span class="nf">on_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#39;Timeout...&#39;</span>
+        <span class="k">return</span> <span class="bp">True</span>  <span class="c"># Don&#39;t kill the stream</span>
+
+<span class="n">sapi</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">streaming</span><span class="o">.</span><span class="n">Stream</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">CustomStreamListener</span><span class="p">(</span><span class="n">api</span><span class="p">))</span>
+<span class="c"># my keyword today is chelsea as the team just had a big win</span>
+<span class="n">sapi</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;chelsea&#39;</span><span class="p">])</span>  
+</code></pre></div>
+<p><em>Note: I set the queue size to 2000 tweets</em>. </p>
+
+<p>After running this script you start to see the tweets streaming in and filling the queue:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(twitter_feed_cloud)[brett:~/src/twitter_feed_cloud]$ python feed_producer.py
+chelsea better not park the bus again
+Kick Off babak pertama, Chelsea vs Atletico Madrid #UCL
+Chelsea / atletico madrid #CestPartie
+Pegang Chelsea Aja dah
+Chelsea vs Atletico! Kick off..
+</code></pre></div>
+<p><strong>Here is the rabbitMQ screenshot:</strong>
+<img src="/static/img/rabbit_mq.png" style="display: block;  width: 100%; margin: 0 auto;"></p>
+
+<h2>Consuming the queue</h2>
+
+<p>Now that I have realtime data flowing into a RabbitMQ queue I can start to play with the data.  At this point I wasn&#39;t quite sure what I wanted to do with the data other than play with some d3 charts.  The first thing I needed to do was stand up an API that will send the data to the frontend via AJAX (at least initially).  </p>
+
+<p>One thing I knew I wanted to do was aggregate and count words in the tweets.  So I used <a href="http://flask.pocoo.org/">Flask</a> to standup a quick API that consumes the queue, formats the data, and sends JSON payloads to the frontend.  Consuming the queue is pretty easy with Pika: </p>
+<div class="highlight"><pre><code class="python language-python" data-lang="python"><span class="kn">import</span> <span class="nn">pika</span>
+
+ <span class="c">#setup queue</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">()</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="c">#function to get X messages from the queue</span>
+<span class="k">def</span> <span class="nf">get_tweets</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">method_frame</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">consume</span><span class="p">(</span><span class="s">&#39;twitter_topic_feed&#39;</span><span class="p">):</span>
+
+        <span class="n">tweets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">body</span><span class="p">))</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c"># Acknowledge the message</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">method_frame</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
+
+        <span class="c"># Escape out of the loop after 10 messages</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c"># Cancel the consumer and return any pending messages</span>
+    <span class="n">requeued_messages</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&#39;Requeued </span><span class="si">%i</span><span class="s"> messages&#39;</span> <span class="o">%</span> <span class="n">requeued_messages</span>
+
+    <span class="k">return</span> <span class="n">tweets</span>
+</code></pre></div>
+<p>Here is the full Flask API with a route to get the word counts from X number of tweets:</p>
+<div class="highlight"><pre><code class="python language-python" data-lang="python"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+
+ <span class="c">#setup queue</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">()</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+
+<span class="c">#function to get data from queue</span>
+<span class="k">def</span> <span class="nf">get_tweets</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># Get ten messages and break out</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">method_frame</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">consume</span><span class="p">(</span><span class="s">&#39;twitter_topic_feed&#39;</span><span class="p">):</span>
+
+        <span class="n">tweets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">body</span><span class="p">))</span>
+
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c"># Acknowledge the message</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">method_frame</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
+
+        <span class="c"># Escape out of the loop after 10 messages</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c"># Cancel the consumer and return any pending messages</span>
+    <span class="n">requeued_messages</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&#39;Requeued </span><span class="si">%i</span><span class="s"> messages&#39;</span> <span class="o">%</span> <span class="n">requeued_messages</span>
+
+    <span class="k">return</span> <span class="n">tweets</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">DEBUG</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">PROPAGATE_EXCEPTIONS</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/feed/raw_feed&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_raw_tweets</span><span class="p">():</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="n">get_tweets</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets</span><span class="p">:</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span> <span class="o">+</span> <span class="n">tt</span> <span class="o">+</span> <span class="s">&quot;&lt;br&gt;&quot;</span>
+
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/feed/word_count&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_word_count</span><span class="p">():</span>
+
+    <span class="c">#get tweets from the queue</span>
+    <span class="n">tweets</span> <span class="o">=</span> <span class="n">get_tweets</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="c">#dont count these words</span>
+    <span class="n">ignore_words</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&quot;rt&quot;</span><span class="p">,</span> <span class="s">&quot;chelsea&quot;</span><span class="p">]</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweets</span><span class="p">:</span>
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tt</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s">&quot;http&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore_words</span><span class="p">:</span>
+                <span class="n">words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="c">#get the counts per word</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+    <span class="c">#how many max words do we want to give back</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">300</span><span class="p">]</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="n">freq</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+    <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;Access-Control-Allow-Origin&#39;</span><span class="p">,</span> <span class="s">&quot;*&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<p>You will want to tune this to only process a number of tweets based on your polling rate and the rate of messages coming from twitter.  With the <em>Chelsea</em> topic I was getting about 25 tweets per second and polling this api every 3 seconds. I set the number of tweets per request to 30. I also set the number of words to give back to 300.</p>
+
+<p>Here is the curl response:</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">GET http://localhost:5000/feed/word_count --json
+HTTP/1.0 200 OK
+Access-Control-Allow-Origin: *
+Content-Length: 96
+Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+Date: Wed, 30 Apr 2014 19:21:20 GMT
+Server: Werkzeug/0.9.4 Python/2.7.6
+
+<span class="o">{</span><span class="s2">&quot;de&quot;</span>:8,<span class="s2">&quot;la&quot;</span>:6,<span class="s2">&quot;atl\u00e9tico&quot;</span>:6,<span class="s2">&quot;el&quot;</span>:4,<span class="s2">&quot;madrid&quot;</span>:4,<span class="s2">&quot;y&quot;</span>:4,<span class="s2">&quot;vs&quot;</span>:3,<span class="s2">&quot;masih&quot;</span>:3,<span class="s2">&quot;champions&quot;</span>:3,<span class="s2">&quot;0-0&quot;</span>:3<span class="o">}</span>
+</code></pre></div>
+<h3>Creating an animated word cloud</h3>
+
+<p>Now we can use this API to feed some cool frontend visualizations.  I have wanted to play with <a href="http://d3js.org/">D3</a> more and I found a <a href="https://github.com/jasondavies/d3-cloud">word cloud D3 implementation</a> (not that I believe word clouds are really interesting, but they look cool).  This word cloud has a useful example in the examples folder that gave me a starting point.  However, I wanted my word cloud to be bigger and to be animated with real time data. </p>
+
+<p>The first step was to create my word_cloud object:</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fontSize</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">log</span><span class="p">().</span><span class="nx">range</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">90</span><span class="p">]);</span>
+
+    <span class="c1">//create my cloud object</span>
+    <span class="kd">var</span> <span class="nx">mycloud</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">cloud</span><span class="p">().</span><span class="nx">size</span><span class="p">([</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">])</span>
+          <span class="p">.</span><span class="nx">words</span><span class="p">([])</span>
+          <span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">~~</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">90</span><span class="p">;</span> <span class="p">})</span>
+          <span class="p">.</span><span class="nx">font</span><span class="p">(</span><span class="s2">&quot;Impact&quot;</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fontSize</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="p">})</span>
+          <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="nx">draw</span><span class="p">)</span>
+</code></pre></div>
+<p>Here I have a cloud object that is 600x600 pixels and it will place text that is rotated either 0 or 90 degrees.  This cloud also changes the font-size based on the size parameter passed in and it will use D3&#39;s scaling feature to scale the size to a value between 10px and 90px.  I planned to use the word count value as the size parameter.  Now we also need the draw function that actually renders the SVG graphic on screen.</p>
+
+<p>Here is my draw function:</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="c1">//render the cloud with animations</span>
+     <span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">//render new tag cloud</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+                 <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(300,300)&quot;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">words</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;font-size&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">((</span><span class="nx">d</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span><span class="o">*</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;font-family&quot;</span><span class="p">,</span> <span class="s2">&quot;Impact&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;opacity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;text-anchor&quot;</span><span class="p">,</span> <span class="s2">&quot;middle&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;translate(&quot;</span> <span class="o">+</span> <span class="p">[</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)rotate(&quot;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">rotate</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">;</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;opacity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span> <span class="p">});</span>
+</code></pre></div>
+<p>Here I am creating a new svg group for each set of words.  The <code>.append(&quot;g&quot;).attr(&quot;transform&quot;, &quot;translate(300,300)&quot;)</code> line gives the starting point for every word. The word cloud tries to place a word at this position and moves it outward if it intersects other words.  I also added a animation to fade the words in once they are all created. That animation is handled by <code>.transition().duration(1000).style(&quot;opacity&quot;, 1)</code>.</p>
+
+<p>Now I want to dynamically grab the words from my api. Here is the function that gets the words from the flask API and pushes them into my tag cloud and then renders it.</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript">    <span class="c1">//ajax call</span>
+    <span class="kd">function</span> <span class="nx">get_words</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//make ajax call</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:5000/feed/word_count&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">words_array</span> <span class="o">=</span> <span class="p">[];</span>
+          <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">json</span><span class="p">){</span>
+            <span class="nx">words_array</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="nx">json</span><span class="p">[</span><span class="nx">key</span><span class="p">]})</span>
+          <span class="p">}</span>
+          <span class="c1">//render cloud</span>
+          <span class="nx">mycloud</span><span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">words</span><span class="p">(</span><span class="nx">words_array</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+</code></pre></div>
+<p>This creates this cool tag cloud:
+<svg width="600" height="600"><g transform="translate(300,300)"><text text-anchor="middle" transform="translate(-21,-37)rotate(90)" style="font-size: 82px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">de</text><text text-anchor="middle" transform="translate(-143,-40)rotate(90)" style="font-size: 72px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">atlético</text><text text-anchor="middle" transform="translate(-52,17)rotate(0)" style="font-size: 72px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">la</text><text text-anchor="middle" transform="translate(-40,68)rotate(0)" style="font-size: 58px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">el</text><text text-anchor="middle" transform="translate(88,-69)rotate(90)" style="font-size: 58px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">madrid</text><text text-anchor="middle" transform="translate(-135,90)rotate(90)" style="font-size: 58px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">y</text><text text-anchor="middle" transform="translate(-70,-121)rotate(0)" style="font-size: 48px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">vs</text><text text-anchor="middle" transform="translate(-92,134)rotate(90)" style="font-size: 48px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">masih</text><text text-anchor="middle" transform="translate(43,77)rotate(90)" style="font-size: 48px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">champions</text><text text-anchor="middle" transform="translate(-74,-81)rotate(90)" style="font-size: 48px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">0-0</text><text text-anchor="middle" transform="translate(35,-132)rotate(0)" style="font-size: 48px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">del</text><text text-anchor="middle" transform="translate(32,83)rotate(0)" style="font-size: 48px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">-</text><text text-anchor="middle" transform="translate(87,136)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">madrid.</text><text text-anchor="middle" transform="translate(-30,-140)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">atletico</text><text text-anchor="middle" transform="translate(-176,-74)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">#chelsea</text><text text-anchor="middle" transform="translate(-22,98)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">0</text><text text-anchor="middle" transform="translate(-38,227)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">chelsea-atletico,</text><text text-anchor="middle" transform="translate(7,52)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">los</text><text text-anchor="middle" transform="translate(150,46)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">tutto</text><text text-anchor="middle" transform="translate(163,80)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">boring</text><text text-anchor="middle" transform="translate(139,-87)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">final</text><text text-anchor="middle" transform="translate(0,-95)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">ni</text><text text-anchor="middle" transform="translate(-151,-159)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">gioco</text><text text-anchor="middle" transform="translate(53,-176)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">come</text><text text-anchor="middle" transform="translate(-74,45)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">e</text><text text-anchor="middle" transform="translate(176,114)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">chelsea.</text><text text-anchor="middle" transform="translate(149,-161)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">saying</text><text text-anchor="middle" transform="translate(156,-28)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">en</text><text text-anchor="middle" transform="translate(52,-79)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">just</text><text text-anchor="middle" transform="translate(-174,123)rotate(90)" style="font-size: 34px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">#cheatl</text><text text-anchor="middle" transform="translate(178,8)rotate(0)" style="font-size: 34px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">costa</text><text text-anchor="middle" transform="translate(181,-66)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">gawang</text><text text-anchor="middle" transform="translate(20,18)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">got</text><text text-anchor="middle" transform="translate(-38,-41)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">31,</text><text text-anchor="middle" transform="translate(-3,69)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">tgok</text><text text-anchor="middle" transform="translate(70,-45)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">u</text><text text-anchor="middle" transform="translate(23,128)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">diego</text><text text-anchor="middle" transform="translate(-20,136)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">looking</text><text text-anchor="middle" transform="translate(-120,115)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">bosan</text><text text-anchor="middle" transform="translate(-184,5)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">@rmsoccer_27:</text><text text-anchor="middle" transform="translate(-192,-25)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">para</text><text text-anchor="middle" transform="translate(120,133)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">kene</text><text text-anchor="middle" transform="translate(65,-118)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">women.</text><text text-anchor="middle" transform="translate(-161,46)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">quiet!</text><text text-anchor="middle" transform="translate(12,78)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">dgn</text><text text-anchor="middle" transform="translate(-161,30)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">o.</text><text text-anchor="middle" transform="translate(-54,-169)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">yoruba</text><text text-anchor="middle" transform="translate(94,44)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">vamos</text><text text-anchor="middle" transform="translate(-85,-159)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">sono</text><text text-anchor="middle" transform="translate(143,151)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">@gameyetu:</text><text text-anchor="middle" transform="translate(-44,-132)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">una</text><text text-anchor="middle" transform="translate(25,94)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">táctica...</text><text text-anchor="middle" transform="translate(134,-136)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">quiet</text><text text-anchor="middle" transform="translate(16,156)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">semi-final</text><text text-anchor="middle" transform="translate(-195,-80)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">quickly</text><text text-anchor="middle" transform="translate(166,-131)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">getting</text><text text-anchor="middle" transform="translate(19,-118)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">rare</text><text text-anchor="middle" transform="translate(122,174)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">ate</text><text text-anchor="middle" transform="translate(172,129)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">league</text><text text-anchor="middle" transform="translate(-79,66)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">¿aún</text><text text-anchor="middle" transform="translate(-173,21)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">mejor</text><text text-anchor="middle" transform="translate(-86,-183)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">prefiero</text><text text-anchor="middle" transform="translate(-47,-182)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">mes</text><text text-anchor="middle" transform="translate(-216,-25)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">igualan</text><text text-anchor="middle" transform="translate(-29,-206)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">@mickf96</text><text text-anchor="middle" transform="translate(159,153)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">scores...</text><text text-anchor="middle" transform="translate(0,-205)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">numbers</text><text text-anchor="middle" transform="translate(97,29)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">cahill.</text><text text-anchor="middle" transform="translate(-108,138)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">huevos</text><text text-anchor="middle" transform="translate(-134,136)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">#atleti</text><text text-anchor="middle" transform="translate(98,57)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">foto</text><text text-anchor="middle" transform="translate(216,35)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">comienza</text><text text-anchor="middle" transform="translate(39,-68)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">se</text><text text-anchor="middle" transform="translate(17,172)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">second</text><text text-anchor="middle" transform="translate(33,-100)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">atletico)</text><text text-anchor="middle" transform="translate(-191,-124)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">league:</text><text text-anchor="middle" transform="translate(-72,-205)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">get</text><text text-anchor="middle" transform="translate(-215,-98)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">ktbfhhghhh</text><text text-anchor="middle" transform="translate(197,-117)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">amarilla</text><text text-anchor="middle" transform="translate(-192,35)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">porque</text><text text-anchor="middle" transform="translate(85,-161)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">madri</text><text text-anchor="middle" transform="translate(190,30)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">flags.</text><text text-anchor="middle" transform="translate(-19,14)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">👌</text><text text-anchor="middle" transform="translate(175,145)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">ada</text><text text-anchor="middle" transform="translate(177,-102)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">eux</text><text text-anchor="middle" transform="translate(-122,-187)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">pritili</text><text text-anchor="middle" transform="translate(6,140)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">-,-</text><text text-anchor="middle" transform="translate(-93,-72)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">,</text><text text-anchor="middle" transform="translate(-89,-202)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">koke</text><text text-anchor="middle" transform="translate(104,-204)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">#cha…</text><text text-anchor="middle" transform="translate(91,211)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">mucho</text><text text-anchor="middle" transform="translate(125,211)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">referencial</text><text text-anchor="middle" transform="translate(-5,16)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">als</text><text text-anchor="middle" transform="translate(-229,-25)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">niet</text><text text-anchor="middle" transform="translate(-230,-80)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">nuestra</text><text text-anchor="middle" transform="translate(39,-206)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">gagnait</text><text text-anchor="middle" transform="translate(8,190)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">(chelsea</text><text text-anchor="middle" transform="translate(241,71)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">bájatela...</text><text text-anchor="middle" transform="translate(203,-54)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">sekarang</text><text text-anchor="middle" transform="translate(169,186)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">gonna</text><text text-anchor="middle" transform="translate(78,-207)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">#cfc</text><text text-anchor="middle" transform="translate(35,242)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">@caroguillenespn:</text><text text-anchor="middle" transform="translate(223,-18)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">semifinale</text><text text-anchor="middle" transform="translate(-210,-150)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">league.</text><text text-anchor="middle" transform="translate(-175,60)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">iyaaa-_-</text><text text-anchor="middle" transform="translate(163,-147)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">cher</text><text text-anchor="middle" transform="translate(121,-205)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">rogol</text><text text-anchor="middle" transform="translate(196,135)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">hora</text><text text-anchor="middle" transform="translate(216,-88)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">semifinal</text><text text-anchor="middle" transform="translate(-191,-44)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">lose</text><text text-anchor="middle" transform="translate(141,205)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">harap</text><text text-anchor="middle" transform="translate(11,100)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">die</text><text text-anchor="middle" transform="translate(-48,-223)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">@diarioas:</text><text text-anchor="middle" transform="translate(208,-150)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">kedua</text><text text-anchor="middle" transform="translate(-152,-209)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">mourinho</text><text text-anchor="middle" transform="translate(-243,-35)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">centrales</text><text text-anchor="middle" transform="translate(-192,99)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">chelsea!!!!</text><text text-anchor="middle" transform="translate(86,68)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">hij</text><text text-anchor="middle" transform="translate(-76,-76)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">31</text><text text-anchor="middle" transform="translate(112,214)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">sgt</text><text text-anchor="middle" transform="translate(-211,55)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">van...</text><text text-anchor="middle" transform="translate(-121,172)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">minuto</text><text text-anchor="middle" transform="translate(182,-32)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">moi</text><text text-anchor="middle" transform="translate(27,-221)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">miedo</text><text text-anchor="middle" transform="translate(-206,76)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">veel</text><text text-anchor="middle" transform="translate(-217,20)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">pergi</text><text text-anchor="middle" transform="translate(-30,251)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">volgend</text><text text-anchor="middle" transform="translate(-52,246)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">want</text><text text-anchor="middle" transform="translate(200,163)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">tight</text><text text-anchor="middle" transform="translate(-225,100)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">gentlemen</text><text text-anchor="middle" transform="translate(-145,192)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">though.</text><text text-anchor="middle" transform="translate(-245,8)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">media</text><text text-anchor="middle" transform="translate(70,-223)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">diretta</text><text text-anchor="middle" transform="translate(-83,245)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">belum</text><text text-anchor="middle" transform="translate(104,71)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">nk</text><text text-anchor="middle" transform="translate(12,258)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">nontonnya</text><text text-anchor="middle" transform="translate(47,-241)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">tak</text><text text-anchor="middle" transform="translate(70,-146)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">mins</text><text text-anchor="middle" transform="translate(-196,144)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">alright,</text><text text-anchor="middle" transform="translate(135,-220)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">@koppnts:</text><text text-anchor="middle" transform="translate(-118,-241)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">@tweetchelseafc:</text><text text-anchor="middle" transform="translate(-239,44)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">assistir</text><text text-anchor="middle" transform="translate(-45,-151)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">al</text><text text-anchor="middle" transform="translate(-90,10)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">zo</text><text text-anchor="middle" transform="translate(-17,-237)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">partido,</text><text text-anchor="middle" transform="translate(-215,130)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">predict</text><text text-anchor="middle" transform="translate(-194,193)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">encuentran</text><text text-anchor="middle" transform="translate(30,-236)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">ae</text><text text-anchor="middle" transform="translate(240,28)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">gone</text><text text-anchor="middle" transform="translate(-11,83)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">final.</text><text text-anchor="middle" transform="translate(244,47)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">della</text><text text-anchor="middle" transform="translate(55,-254)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">#atleticodemadrid</text><text text-anchor="middle" transform="translate(232,-63)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">pura</text><text text-anchor="middle" transform="translate(-232,128)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">boys</text><text text-anchor="middle" transform="translate(109,-227)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">iyaaa,</text><text text-anchor="middle" transform="translate(-130,241)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">ptnnnnnnn</text><text text-anchor="middle" transform="translate(195,187)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">verder</text><text text-anchor="middle" transform="translate(-87,-220)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">er</text><text text-anchor="middle" transform="translate(-70,266)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">@deqtanariss:</text><text text-anchor="middle" transform="translate(-247,-94)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">primera</text><text text-anchor="middle" transform="translate(221,-104)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">dicho</text><text text-anchor="middle" transform="translate(243,134)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">masing-masing.</text><text text-anchor="middle" transform="translate(-103,-239)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">debilidad</text><text text-anchor="middle" transform="translate(155,208)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">politici…</text><text text-anchor="middle" transform="translate(-78,-239)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">twats</text><text text-anchor="middle" transform="translate(142,249)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">@koertwesterman:</text><text text-anchor="middle" transform="translate(-174,205)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">iya,</text><text text-anchor="middle" transform="translate(243,5)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">mag</text><text text-anchor="middle" transform="translate(194,-139)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">fans</text><text text-anchor="middle" transform="translate(-47,-264)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">&quot;@yuyunnurul69:</text><text text-anchor="middle" transform="translate(-30,-75)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">a.</text><text text-anchor="middle" transform="translate(-265,-14)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">hazard</text><text text-anchor="middle" transform="translate(8,-239)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">#ucl</text><text text-anchor="middle" transform="translate(56,-274)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">@santymod</text><text text-anchor="middle" transform="translate(182,223)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">bakt</text><text text-anchor="middle" transform="translate(-6,120)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">ball</text><text text-anchor="middle" transform="translate(-257,-56)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">siso</text><text text-anchor="middle" transform="translate(-196,-15)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">x</text><text text-anchor="middle" transform="translate(-256,23)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">hoy</text><text text-anchor="middle" transform="translate(56,265)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">adrián.</text><text text-anchor="middle" transform="translate(-178,-195)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">segui...</text><text text-anchor="middle" transform="translate(-236,187)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">@jarangmandi_:</text><text text-anchor="middle" transform="translate(224,165)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">fue</text><text text-anchor="middle" transform="translate(-247,76)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">menjaga</text><text text-anchor="middle" transform="translate(-106,173)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">de...</text><text text-anchor="middle" transform="translate(-130,262)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">contre</text><text text-anchor="middle" transform="translate(168,-198)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">live</text><text text-anchor="middle" transform="translate(-33,-243)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">tim</text><text text-anchor="middle" transform="translate(-193,228)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">#realmadrid</text><text text-anchor="middle" transform="translate(-134,-217)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">feh</text><text text-anchor="middle" transform="translate(243,-32)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">conoces</text><text text-anchor="middle" transform="translate(118,-254)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">jaar</text><text text-anchor="middle" transform="translate(-266,52)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">gaat</text><text text-anchor="middle" transform="translate(-180,-208)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">peluang</text><text text-anchor="middle" transform="translate(238,88)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">ayo</text><text text-anchor="middle" transform="translate(-250,-129)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">@alfianlutfi09:</text><text text-anchor="middle" transform="translate(7,275)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">aflojan</text><text text-anchor="middle" transform="translate(-267,-84)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">partido</text><text text-anchor="middle" transform="translate(78,270)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">chelsea!</text><text text-anchor="middle" transform="translate(-228,-152)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">jogo</text><text text-anchor="middle" transform="translate(-216,-172)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">trabajo</text><text text-anchor="middle" transform="translate(-274,7)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">honest</text><text text-anchor="middle" transform="translate(211,132)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">one</text><text text-anchor="middle" transform="translate(-54,-249)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">por</text><text text-anchor="middle" transform="translate(258,-20)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">app</text><text text-anchor="middle" transform="translate(-265,94)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">smpai</text><text text-anchor="middle" transform="translate(-48,-36)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">!!</text><text text-anchor="middle" transform="translate(210,-20)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">con</text><text text-anchor="middle" transform="translate(-194,175)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">keep</text><text text-anchor="middle" transform="translate(37,-28)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">:</text><text text-anchor="middle" transform="translate(267,6)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">parei</text><text text-anchor="middle" transform="translate(-218,-58)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">da</text><text text-anchor="middle" transform="translate(30,142)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">stu</text><text text-anchor="middle" transform="translate(-132,-241)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">leg:</text><text text-anchor="middle" transform="translate(40,281)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">deu</text><text text-anchor="middle" transform="translate(-222,37)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">mi</text><text text-anchor="middle" transform="translate(-205,213)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(188, 189, 34); opacity: 1;">👏👏👏👌</text><text text-anchor="middle" transform="translate(-254,-164)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(219, 219, 141); opacity: 1;">degoute</text><text text-anchor="middle" transform="translate(8,-276)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(23, 190, 207); opacity: 1;">atm..</text><text text-anchor="middle" transform="translate(77,-237)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(158, 218, 229); opacity: 1;">atleti</text><text text-anchor="middle" transform="translate(-250,121)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(31, 119, 180); opacity: 1;">ben</text><text text-anchor="middle" transform="translate(-152,-248)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(174, 199, 232); opacity: 1;">bek</text><text text-anchor="middle" transform="translate(-212,-220)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 127, 14); opacity: 1;">vergeten</text><text text-anchor="middle" transform="translate(224,-138)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 187, 120); opacity: 1;">chato</text><text text-anchor="middle" transform="translate(-232,-193)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(44, 160, 44); opacity: 1;">badly.</text><text text-anchor="middle" transform="translate(-81,279)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(152, 223, 138); opacity: 1;">striker</text><text text-anchor="middle" transform="translate(265,-74)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(214, 39, 40); opacity: 1;">@chydee:</text><text text-anchor="middle" transform="translate(-189,-245)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(255, 152, 150); opacity: 1;">@mirondo:</text><text text-anchor="middle" transform="translate(-243,-211)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(148, 103, 189); opacity: 1;">jsupporte</text><text text-anchor="middle" transform="translate(-146,-275)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(197, 176, 213); opacity: 1;">segui</text><text text-anchor="middle" transform="translate(258,31)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(140, 86, 75); opacity: 1;">otro.</text><text text-anchor="middle" transform="translate(243,-111)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(196, 156, 148); opacity: 1;">back</text><text text-anchor="middle" transform="translate(223,-178)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(227, 119, 194); opacity: 1;">liverpool</text><text text-anchor="middle" transform="translate(-279,-52)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(247, 182, 210); opacity: 1;">móvil?</text><text text-anchor="middle" transform="translate(266,-43)rotate(0)" style="font-size: 10px; font-family: Impact; fill: rgb(127, 127, 127); opacity: 1;">vous</text><text text-anchor="middle" transform="translate(-159,270)rotate(90)" style="font-size: 10px; font-family: Impact; fill: rgb(199, 199, 199); opacity: 1;">kegadisan</text></g></svg></p>
+
+<p>Now I want to poll for new data every X seconds based on how fast data is coming in from my feed.  Here I have it set to a four second interval. <code>var interval = setInterval(function(){get_words()}, 4000);</code> </p>
+
+<p>Here is the animated version:
+<iframe width="640" height="480" src="//www.youtube.com/embed/zE4Usr5mstc?rel=0" frameborder="0" allowfullscreen></iframe></p>
+
+<p>My final javascript word count implementation:</p>
+<div class="highlight"><pre><code class="javascript language-javascript" data-lang="javascript"><span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">meta</span> <span class="nx">charset</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;d3-cloud/lib/d3/d3.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;d3-cloud/d3.layout.cloud.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">category20</span><span class="p">();</span>
+    <span class="c1">//what range of font sizes do we want, we will scale the word counts</span>
+    <span class="kd">var</span> <span class="nx">fontSize</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">log</span><span class="p">().</span><span class="nx">range</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">90</span><span class="p">]);</span>
+
+    <span class="c1">//create my cloud object</span>
+    <span class="kd">var</span> <span class="nx">mycloud</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">cloud</span><span class="p">().</span><span class="nx">size</span><span class="p">([</span><span class="mi">600</span><span class="p">,</span> <span class="mi">600</span><span class="p">])</span>
+          <span class="p">.</span><span class="nx">words</span><span class="p">([])</span>
+          <span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">~~</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">90</span><span class="p">;</span> <span class="p">})</span>
+          <span class="c1">// .rotate(function() { return 0; })</span>
+          <span class="p">.</span><span class="nx">font</span><span class="p">(</span><span class="s2">&quot;Impact&quot;</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">fontSize</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fontSize</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span> <span class="p">})</span>
+          <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="nx">draw</span><span class="p">)</span>
+
+    <span class="c1">//render the cloud with animations</span>
+     <span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">words</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//fade existing tag cloud out</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">).</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
+                <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;opacity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+
+        <span class="c1">//render new tag cloud</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">)</span>
+                 <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;translate(300,300)&quot;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">words</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;font-size&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">((</span><span class="nx">d</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span><span class="o">*</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">;</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;font-family&quot;</span><span class="p">,</span> <span class="s2">&quot;Impact&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fill&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;opacity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;text-anchor&quot;</span><span class="p">,</span> <span class="s2">&quot;middle&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;translate(&quot;</span> <span class="o">+</span> <span class="p">[</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;)rotate(&quot;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">rotate</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">;</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">transition</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">duration</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;opacity&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">text</span><span class="p">;</span> <span class="p">});</span>
+      <span class="p">}</span>
+
+    <span class="c1">//ajax call</span>
+    <span class="kd">function</span> <span class="nx">get_words</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//make ajax call</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:5000/feed/word_count&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">words_array</span> <span class="o">=</span> <span class="p">[];</span>
+          <span class="k">for</span> <span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">json</span><span class="p">){</span>
+            <span class="nx">words_array</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="nx">json</span><span class="p">[</span><span class="nx">key</span><span class="p">]})</span>
+          <span class="p">}</span>
+          <span class="c1">//render cloud</span>
+          <span class="nx">mycloud</span><span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">words</span><span class="p">(</span><span class="nx">words_array</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="c1">//create SVG container</span>
+    <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span>
+
+    <span class="c1">//render first cloud</span>
+    <span class="nx">get_words</span><span class="p">();</span>
+
+    <span class="c1">//start streaming</span>
+    <span class="c1">//var interval = setInterval(function(){get_words()}, 4000);</span>
+<span class="p">})();</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</code></pre></div>
+<h3>What&#39;s Next?</h3>
+
+<ul>
+<li>Use Node.js and socket.io to push the data to the client instead of polling it. I can use a node.js AMQP client to grab data off the queue.</li>
+<li>Create other cool visualizations. Maybe a realtime geo location map or a animated chart showing client usage shares.</li>
+<li>Any other cool ideas? Comment below.</li>
+</ul>
+</div>
+<div class="clearfix"></div>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'brettdangerblog'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'brettdangerblog'; // required: replace example with your forum shortname
+      var disqus_url = 'http://www.brettdangerfield.com/post/realtime_data_tag_cloud';
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<script type="text/javascript">
+
+</script>
+
+
+            </div><!--/span-->
+            <!-- sidebar here -->
+            <div class="col-lg-3 col-md-4 col-sm-4 sidebar">
+    <div class="widget-sidebar widget_top-posts">
+      <h3>Popular Posts</h3>
+      <ul>
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <li>
+                <div class="post-wrapper">
+                     
+                        <div class="post-img" style="background: url(https://cdn.sparkfun.com//assets/parts/6/8/0/5/11215-01.jpg);"></div>
+                    
+                    <div class="post-text">
+                        <div class="post-meta">
+                            <span><em>in</em> <a href="/category/programmingelectronics" title="Programming" rel="category tag">Programming</a></span>
+                            <span><em>13 Jun 2014</em></span>
+                        </div>
+                        <div class="heading-title">
+                            <h2><a href="/post/raspberrypi_tempature_monitor_project">Building a wireless temperature sensor with a Raspberry Pi and Xbee Wireless modules</a></h2>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+            <li>
+                <div class="post-wrapper">
+                     
+                        <div class="post-img" style="background: url(/static/img/tag_cloud.png);"></div>
+                    
+                    <div class="post-text">
+                        <div class="post-meta">
+                            <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                            <span><em>01 May 2014</em></span>
+                        </div>
+                        <div class="heading-title">
+                            <h2><a href="/post/realtime_data_tag_cloud">Playing with REALTIME data, Python and D3</a></h2>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+            <li>
+                <div class="post-wrapper">
+                     
+                        <div class="post-img" style="background: url(/static/img/mooc_python.png);"></div>
+                    
+                    <div class="post-text">
+                        <div class="post-meta">
+                            <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                            <span><em>14 Apr 2014</em></span>
+                        </div>
+                        <div class="heading-title">
+                            <h2><a href="/post/full_stack_mooc_app_part_1_python_backend">Mooc Aggregator Project, Python backend with MongoDB and SQLAlachemy</a></h2>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+            <li>
+                <div class="post-wrapper">
+                     
+                        <div class="post-img" style="background: url(http://www.afrobella.com/wp-content/uploads/2012/12/Django-Unchained-wallpapers-1920x1200-2.jpg);"></div>
+                    
+                    <div class="post-text">
+                        <div class="post-meta">
+                            <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                            <span><em>04 Jan 2013</em></span>
+                        </div>
+                        <div class="heading-title">
+                            <h2><a href="/post/django_vs_pyramid">Django vs Pyramid - My Comparison</a></h2>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+        
+            
+        
+            
+        
+            
+            <li>
+                <div class="post-wrapper">
+                     
+                        <div class="post-img" style="background: url(http://www.pylonsproject.org/static/images/pyramid-small.png);"></div>
+                    
+                    <div class="post-text">
+                        <div class="post-meta">
+                            <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                            <span><em>07 Sep 2012</em></span>
+                        </div>
+                        <div class="heading-title">
+                            <h2><a href="/post/creating_a_blog_with_pyramid_mongdb_bootstrap">Creating a blog engine with Python, Pyramid, MongoDB and Twitter Bootstrap</a></h2>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            
+        
+            
+        
+            
+         
+      </ul>
+    </div>
+
+    <div class="widget-sidebar widget_categories">
+      <h3>Categories</h3>
+      <ul>
+        
+            <li><a href="/category/programming">Programming</a></li>
+        
+            <li><a href="/category/personal">Personal</a></li>
+        
+            <li><a href="/category/fatherhood">Fatherhood</a></li>
+        
+            <li><a href="/category/sports">Sports</a></li>
+        
+            <li><a href="/category/technology">Technology</a></li>
+        
+            <li><a href="/category/electronics">Electronics</a></li>
+        
+            <li><a href="/category/travel">Travel</a></li>
+        
+            <li><a href="/category/career">Career</a></li>
+        
+      </ul>
+    </div>
+
+    <div class="widget-sidebar widget_top-posts">
+      <h3>Recent Posts</h3>
+      <ul>
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/personalcareerprogramming" title="Personal" rel="category tag">Personal</a></span>
+                        <span><em>07 Jan 2015</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/2014_career_overview">2014 and My Transition to Engineering Manager</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/travelfatherhood" title="Travel" rel="category tag">Travel</a></span>
+                        <span><em>24 Jun 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/first_rv_trip_mount_rushmore_black_hills">Holiday Road: Trip 1 - Black Hills and Mount Rushmore</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/programmingelectronics" title="Programming" rel="category tag">Programming</a></span>
+                        <span><em>13 Jun 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/raspberrypi_tempature_monitor_project">Building a wireless temperature sensor with a Raspberry Pi and Xbee Wireless modules</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                        <span><em>01 May 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/realtime_data_tag_cloud">Playing with REALTIME data, Python and D3</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/technology" title="Technology" rel="category tag">Technology</a></span>
+                        <span><em>25 Apr 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/replacing_slr_with_compact_mirrorless_samsung_nx300">Replacing my DSLR with a compact mirrorless camera, the NX300</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                        <span><em>22 Apr 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/full_stack_mooc_app_part_1_continued_saving_to_mongodb">Mooc Aggregator Project, Python backend Continued, saving to mongodb and postgres</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="post-wrapper">
+
+                <div class="post-text">
+                    <div class="post-meta">
+                        <span><em>in</em> <a href="/category/programming" title="Programming" rel="category tag">Programming</a></span>
+                        <span><em>14 Apr 2014</em></span>
+                    </div>
+                    <div class="heading-title">
+                        <h2><a href="/post/full_stack_mooc_app_part_1_python_backend">Mooc Aggregator Project, Python backend with MongoDB and SQLAlachemy</a></h2>
+                    </div>
+                </div>
+            </div>
+        </li>
+        
+         
+      </ul>
+    </div>
+</div>
+
+        </div> <!-- end row -->
+      </div>
+</section>
+    <!-- end:content -->
+<!-- Footer HERE -->
+   
+<!-- begin:copyright -->
+<section id="copyright">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-sm-6 copy-left">
+        <p>Copyright &copy; 2014 <strong><a href="/">brettdangerfield.com</a></strong>. <span style="float: right">Hosted on <a href="http://www.github.com/brettdanger/published_blog/">Github</a> | Powered by <a href="http://jekyllrb.com">Jekyll</a></span></p>
+      </div>
+
+      <div class="col-md-6 col-sm-6 copy-right">
+        <ul class="list-inline social-icon">
+          <li><a href="http://www.twitter.com/brettdanger" class="icon-twitter" rel="tooltip" title="" data-placement="top" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="http://www.facebook.com/brettdanger" class="icon-facebook" rel="tooltip" title="" data-placement="top" data-original-title="Facebook"><i class="fa fa-facebook-square"></i></a></li>
+          <li><a href="http://www.linkedin.com/pub/brett-dangerfield/8/150/392" class="icon-linkedin" rel="tooltip" title="" data-placement="top" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a></li>
+          <li><a href="http://github.com/brettdanger" class="icon-github" rel="tooltip" title="" data-placement="top" data-original-title="Github"><i class="fa fa-github"></i></a></li>
+          <li><a href="https://plus.google.com/+BrettDangerfield" class="icon-googleplus" rel="tooltip" title="" data-placement="top" data-original-title="Google Plus"><i class="fa fa-google-plus"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end:copyrigt -->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+   <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/masonry.pkgd.min.js"></script>
+    <script src="/static/js/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
+    <script src="/static/js/gmap3.min.js"></script>
+    <script src="/static/js/jquery.isotope.min.js"></script>
+    <script src="/static/js/jquery.easing.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script type="text/javascript" src="/static/js/prettify/prettify.js"></script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,86 @@
+/* Violet */
+
+a{
+	color: #d549ee;
+}
+
+a:hover{
+	color: #bc29d7;
+}
+
+.color{
+	color: #d549ee;
+}
+
+.navbar .btn{
+	background: #d549ee;
+}
+
+.navbar .btn:hover{
+	background: #bc29d7;
+}
+
+.navbar .nav > li > a:hover{
+	background: #d549ee !important;
+}   
+
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover,
+.navbar .nav .active > a:focus {
+	background: #d549ee !important;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+	background: #d549ee !important;
+}
+
+header{
+	border-top: 4px solid #bc29d7;
+	border-bottom: 2px solid #bc29d7;
+	background: #d549ee;	
+}
+
+.recent-posts .carousel_nav i{
+	background: #d549ee;
+}
+
+.sponsors .carousel_nav i{
+	background: #d549ee;
+}
+
+.pricel .phead-top{
+	background: #d549ee;
+}
+
+.aboutus .asocial i{
+	background:#d549ee;
+}
+
+
+.paging a:hover{
+	background: #d549ee;
+}
+
+.paging .current{
+	background: #d549ee;
+}
+
+.totop a, .totop a:visited{
+	background: #d549ee;
+}
+
+/* Responsive */
+
+@media (max-width: 767px){
+	.dropdown-menu a:hover,.dropdown-menu a:focus{
+		background: #d549ee !important;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 979px){
+	.dropdown-menu a:hover,.dropdown-menu a:focus{
+		background: #d549ee !important;
+	} 
+}
