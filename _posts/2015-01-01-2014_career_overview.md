@@ -21,7 +21,7 @@ Once I decided this was a transition I wanted to make, I sought advice on how to
 
 I believe it is important to stay sharp in this area. As an Engineer, I preferred technical, former-engineer bosses as I felt they had a better grasp of my job, and were obviously better mentors.  I don't want to be Dilbert's boss!
 
-<a href="http://dilbert.com/strips/comic/2009-10-04/" title="Dilbert.com"><img src="http://dilbert.com/dyn/str_strip/000000000/00000000/0000000/000000/60000/9000/200/69231/69231.strip.sunday.gif" border="0" alt="Dilbert.com" /></a>
+<a href="http://dilbert.com/strips/comic/2009-10-04/" title="Dilbert.com"><img src="/static/img/dilbert1.png" border="0" alt="Dilbert.com" /></a>
 
 I have now been a manager for 90 days, and have grown my team by hiring three more engineers and guiding the team to some very important milestones for the company.  I have also read some great articles and blogs on what it means to be a great Engineering manager and on leading engineering teams.  Those articles helped me build my personal management philosophy:
 
